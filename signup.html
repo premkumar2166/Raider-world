@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Raiders World</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+    <main class="login-page">
+        <!-- Background handled by CSS -->
+        <a href="index.html" class="logo" style="position: absolute; top: 2rem; left: 2rem; z-index: 10;">
+            <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+        </a>
+
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Join the Crew</h1>
+                <p>Create your Raiders World account</p>
+            </div>
+
+            <form class="login-form" id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="••••••••" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-options">
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to the <a href="#" style="color:var(--accent-color)">Terms & Conditions</a></label>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <i data-lucide="user-plus" style="width: 20px; height: 20px;"></i>
+                    Create Account
+                </button>
+            </form>
+
+            <div class="divider">or sign up with</div>
+
+            <div class="social-login">
+                <button class="social-btn" type="button" onclick="alert('Google signup coming soon!')">
+                    <i data-lucide="chrome" style="width: 18px; height: 18px;"></i>
+                    Google
+                </button>
+            </div>
+
+            <div class="signup-link">
+                Already have an account? <a href="login.html">Login here</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        function handleSignup(event) {
+            event.preventDefault();
+            const name = document.getElementById('fullName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            // Mock user data registration
+            const userData = {
+                name: name,
+                email: email,
+                photo: `https://ui-avatars.com/api/?name=${name.replace(' ', '+')}&background=f59e0b&color=fff&size=128`,
+                phone: '',
+                loginTime: new Date().toLocaleString(),
+                loggedIn: true
+            };
+
+            // Save user profile using logic from script.js
+            if(typeof ProfileManager !== 'undefined') {
+                 ProfileManager.saveUser(userData);
+            } else {
+                 localStorage.setItem('raiders_user', JSON.stringify(userData));
+            }
+
+            // Show success and redirect
+            alert('Account created successfully! Welcome ' + userData.name);
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

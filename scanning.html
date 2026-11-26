@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bike Scanning | Raiders World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .scanning-hero {
+            padding: 120px 0 60px;
+            text-align: center;
+            background: url('scanning_hero_bg_1774081690026.png') center/cover no-repeat;
+            position: relative;
+        }
+        .scanning-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(10,10,13,0.7) 0%, rgba(10,10,13,0.95) 100%);
+        }
+        .scanning-hero .container { position: relative; z-index: 1; }
+        
+        .scan-dot {
+            position: absolute;
+            width: 8px; 
+            height: 8px;
+            background: #f59e0b;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #f59e0b;
+            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes ping {
+            75%, 100% { transform: scale(2); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="dark-theme carbon-fiber">
+    <script>
+        // Check if user is logged in, if not redirect to login page
+        function checkLogin() {
+            const user = localStorage.getItem('raiders_user');
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        }
+        checkLogin();
+    </script>
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Parts & Bikes</a>
+                <a href="gear.html">Rider Gear</a>
+                <a href="marketplace.html">Buy/Sell Bikes</a>
+                <a href="services.html">Services</a>
+                <a href="scanning.html" class="active">Bike Scanning</a>
+                <a href="tracker.html" class="text-accent">Bike Location</a>
+                <a href="about.html">About</a>
+                <a href="login.html" class="text-accent">Login</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="icon-btn search-trigger" aria-label="Search">
+                    <i data-lucide="search"></i>
+                </button>
+                <div class="profile-container">
+                    <button class="icon-btn profile-btn" id="profileBtn" aria-label="Profile">
+                        <img src="https://via.placeholder.com/32" alt="Profile" class="profile-photo">
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i data-lucide="user"></i> My Profile
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i data-lucide="settings"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="loginBtn">
+                            <i data-lucide="log-in"></i> Login
+                        </button>
+                        <button class="dropdown-item" id="logoutBtn" style="display: none;">
+                            <i data-lucide="log-out"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                <a href="cart.html" class="icon-btn cart-btn" aria-label="Cart" style="display: flex; text-decoration: none;">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="scanning-hero">
+            <div class="container">
+                <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: var(--accent-color); border: 1px solid var(--accent-color);">AI Diagnostics V4.0</span>
+                <h1 class="hero-title">Precision <span class="text-accent">Bike Scanning</span></h1>
+                <p class="hero-subtitle" style="margin: 0 auto;">Upload a photo of your bike. Our neural network identifies every component, from suspension brands to brake models.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container scanning-container">
+                <div class="scan-zone glass-panel" id="scanZone" style="min-height: 400px; display: flex; flex-direction: column; justify-content: center;">
+                    <div class="scan-line"></div>
+                    <div id="scanOverlay" style="position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 10;">
+                        <div class="scan-line" style="display: block;"></div>
+                        <div class="scanning-dots" id="scanningDots"></div>
+                    </div>
+                    <div id="dropContent">
+                        <i data-lucide="camera"></i>
+                        <h3>Drop Bike Photo Here</h3>
+                        <p class="text-secondary">Drag and drop or click to upload (JPG, PNG)</p>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                        <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="document.getElementById('fileInput').click()">Select Image</button>
+                    </div>
+                    <div id="imagePreviewContainer" style="display: none; width: 100%; height: 100%; position: relative;">
+                        <img id="previewImage" src="" style="width: 100%; height: 100%; object-fit: contain; border-radius: 0.5rem;">
+                    </div>
+                    <div id="scanningContent" style="display: none;">
+                        <h3 class="glow-text">Analyzing Neural Data...</h3>
+                        <div class="analysis-log" id="analysisLog"></div>
+                    </div>
+                </div>
+
+                <div class="scanning-results" id="resultsArea">
+                    <div class="result-card glass-panel" style="border-top: 3px solid #10b981;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                    <h2 id="identifiedModel" style="margin: 0;">Ducati Panigale V4 Identified</h2>
+                                    <span class="badge" style="margin: 0; background: #10b981; color: white; border: none;">99.2% Match</span>
+                                </div>
+                                <p class="text-secondary" style="font-size: 1.1rem;">Estimated Market Value: <span class="text-accent" style="font-weight: 700; font-size: 1.3rem;" id="marketValue">₹23,00,000</span></p>
+                            </div>
+                            <button class="btn btn-outline" onclick="location.reload()"><i data-lucide="refresh-cw"></i> New Scan</button>
+                        </div>
+
+                        <div class="parts-breakdown">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                                <h4 style="margin: 0; color: var(--accent-color);">Detected Components & Upgrades</h4>
+                                <button class="btn btn-primary" onclick="addAllToCart()"><i data-lucide="shopping-cart"></i> Add All to Cart</button>
+                            </div>
+                            <div id="partsList">
+                                <!-- Parts will be injected here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel" style="margin-top: 2rem; background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <i data-lucide="check-circle" style="color: #10b981;"></i>
+                            <p style="margin: 0;">These parts have been cross-referenced with your <b>Service History</b>. No immediate replacements needed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-bottom">
+            <p>&copy; 2026 Raiders World. AI Scanning Engine Powered by RaidersX.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        const scanZone = document.getElementById('scanZone');
+        const fileInput = document.getElementById('fileInput');
+        const dropContent = document.getElementById('dropContent');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const previewImage = document.getElementById('previewImage');
+        const scanOverlay = document.getElementById('scanOverlay');
+        const scanningContent = document.getElementById('scanningContent');
+        const analysisLog = document.getElementById('analysisLog');
+        const resultsArea = document.getElementById('resultsArea');
+        const partsList = document.getElementById('partsList');
+
+        const mockParts = [
+            { name: "Akrapovič Titanium Exhaust", detail: "Full System Configuration", price: 125000.00, accuracy: "99%", image: "https://images.unsplash.com/photo-1502744688674-c619d1586c9e?auto=format&fit=crop&q=80" },
+            { name: "Ohlins NIX30 Forks", detail: "Electronic Compression", price: 85000.00, accuracy: "98%", image: "https://images.unsplash.com/photo-1541094367332-90f7a77ea4f9?auto=format&fit=crop&q=80" },
+            { name: "Brembo Stylema Calipers", detail: "Monobloc Radial Mount", price: 35000.00, accuracy: "97%", image: "https://images.unsplash.com/photo-1568772585407-9361f9bfce87?auto=format&fit=crop&q=80" },
+            { name: "Rizoma Stealth Mirrors", detail: "Aerodynamic Winglet", price: 18500.00, accuracy: "95%", image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80" },
+            { name: "Pirelli Diablo Supercorsa SP", detail: "Track Composition", price: 12000.00, accuracy: "99%", image: "https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?auto=format&fit=crop&q=80" }
+        ];
+
+        const logLines = [
+            "> Initializing neural mesh...",
+            "> Loading bike geometry database...",
+            "> Isolating foreground asset...",
+            "> Detecting component: Suspension [Ohlins]...",
+            "> Detecting component: Braking [Brembo]...",
+            "> Cross-referencing 2024 Panigale V4 specs...",
+            "> Extraction complete. Rendering report..."
+        ];
+
+        // Handle File Selection
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    startScan();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Drag and Drop
+        scanZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            scanZone.style.borderColor = 'var(--accent-color)';
+        });
+        
+        scanZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            scanZone.style.borderColor = 'var(--border-glass)';
+        });
+
+        scanZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    startScan();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function startScan() {
+            // UI State Change
+            dropContent.style.display = 'none';
+            imagePreviewContainer.style.display = 'block';
+            scanOverlay.style.display = 'block';
+            scanningContent.style.display = 'block';
+            
+            // Generate random scanning dots
+            const dotsContainer = document.getElementById('scanningDots');
+            dotsContainer.innerHTML = '';
+            for(let i=0; i<15; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'scan-dot';
+                dot.style.left = Math.random() * 90 + '%';
+                dot.style.top = Math.random() * 90 + '%';
+                dot.style.animationDelay = Math.random() * 2 + 's';
+                dotsContainer.appendChild(dot);
+            }
+            
+            let lineIndex = 0;
+            analysisLog.innerHTML = ''; // Clear previous log
+            
+            const logInterval = setInterval(() => {
+                if (lineIndex < logLines.length) {
+                    const p = document.createElement('p');
+                    p.textContent = logLines[lineIndex];
+                    p.style.margin = '0.2rem 0';
+                    analysisLog.appendChild(p);
+                    analysisLog.scrollTop = analysisLog.scrollHeight;
+                    lineIndex++;
+                } else {
+                    clearInterval(logInterval);
+                    setTimeout(showResults, 800);
+                }
+            }, 500);
+        }
+
+        function showResults() {
+            scanZone.style.display = 'none';
+            resultsArea.style.display = 'block';
+            
+            // Log this scan event for the admin panel
+            if (typeof AdminScanningManager !== 'undefined') {
+                const user = ProfileManager.getUser();
+                const newLog = {
+                    date: new Date().toLocaleString(),
+                    model: 'Ducati Panigale V4', // This is hardcoded in the demo
+                    user: user ? `Member: ${user.name}` : 'Guest User',
+                    parts: mockParts.map(p => p.name.split(' ')[0]).slice(0, 3).join(', '),
+                    confidence: 99.2 // Hardcoded from the demo
+                };
+                AdminScanningManager.addScanLog(newLog);
+            }
+
+            let html = '';
+            mockParts.forEach(part => {
+                html += `
+                    <div class="part-item">
+                        <div style="display:flex; align-items:center; gap:1rem;">
+                            <div style="width:50px; height:50px; background:url('${part.image}') center/cover; border-radius:0.5rem;"></div>
+                            <div>
+                                <div class="part-name">${part.name}</div>
+                                <div class="part-detail">${part.detail}</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="price" style="font-size:1.1rem; margin-bottom:0.2rem;">₹${part.price.toFixed(2)}</div>
+                            <span class="accuracy-badge" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-color: rgba(59, 130, 246, 0.3);">${part.accuracy} Conf.</span>
+                            <button class="btn btn-icon add-to-cart" 
+                                data-title="${part.name}" 
+                                data-price="${part.price}" 
+                                data-category="Scanned Part" 
+                                data-image="${part.image}" 
+                                style="margin-left: 0.5rem; width: 32px; height: 32px;">
+                                <i data-lucide="plus" style="width:16px; height:16px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            partsList.innerHTML = html;
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function addAllToCart() {
+            if (typeof CartManager !== 'undefined') {
+                mockParts.forEach(part => {
+                    CartManager.addToCart({
+                        title: part.name,
+                        price: part.price,
+                        category: "Scanned Part",
+                        image: part.image
+                    });
+                });
+                window.location.href = 'cart.html';
+            } else {
+                alert('Cart system not loaded.');
+            }
+        }
+    </script>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeLoginModal">&times;</button>
+            <h2>Welcome Back</h2>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Login</button>
+                <p class="form-footer">Don't have an account? <a href="#" class="text-accent">Sign up here</a></p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

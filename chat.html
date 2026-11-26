@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crew Chat | Raiders World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .chat-container { max-width: 900px; margin: 100px auto 40px; padding: 0 2rem; height: calc(100vh - 140px); display: flex; flex-direction: column; }
+    </style>
+</head>
+<body class="dark-theme">
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Parts & Bikes</a>
+                <a href="gear.html">Rider Gear</a>
+                <a href="marketplace.html">Buy/Sell Bikes</a>
+                <a href="services.html">Services</a>
+                <a href="scanning.html">Bike Scanning</a>
+                <a href="tracker.html">Bike Location</a>
+                <a href="about.html">About</a>
+                <a href="chat.html" class="active">Crew Chat</a>
+            </nav>
+            <div class="nav-actions">
+                <div class="profile-container">
+                    <button class="icon-btn profile-btn" id="profileBtn">
+                        <img src="https://via.placeholder.com/32" class="profile-photo">
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile.html" class="dropdown-item"><i data-lucide="user"></i> My Profile</a>
+                        <button class="dropdown-item" id="logoutBtn"><i data-lucide="log-out"></i> Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="chat-container-main">
+        <div class="panel chat-main" style="height: 100%;">
+            <div class="chat-header">
+                <div style="width: 45px; height: 45px; background: var(--bg-surface); border-radius: 50%; border: 2px solid var(--accent-color); display:flex; align-items:center; justify-content:center;"><i data-lucide="users" class="text-accent"></i></div>
+                <div>
+                    <h3 style="margin:0; font-size: 1.1rem;">Riders Crew Hub</h3>
+                    <p style="margin:0; font-size: 0.8rem; color: #10b981;">● Group Chat Online</p>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="messagesArea">
+                <!-- Messages injected here -->
+            </div>
+            
+            <div class="chat-input-area">
+                <div class="chat-input-actions">
+                    <label for="mediaInput" title="Send Media"><i data-lucide="image"></i></label>
+                    <input type="file" id="mediaInput" accept="image/*,video/*" style="display: none;" onchange="ChatManager.handleMedia(this)">
+                    <button onclick="ChatManager.sendSticker()" title="Send Sticker"><i data-lucide="smile"></i></button>
+                    <button onclick="ChatManager.sendVoice()" title="Voice Message"><i data-lucide="mic"></i></button>
+                </div>
+                <input type="text" class="chat-input" id="userMsgInput" placeholder="Message the crew...">
+                <button class="icon-btn" id="userSendBtn" style="background: var(--accent-color); color: #fff; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;"><i data-lucide="send"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = ProfileManager.getUser();
+            if (!user || !user.loggedIn) {
+                alert("Membership Required: Please login to access Crew Chat.");
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            if(!user.joined) {
+                 alert("This channel is exclusive for Raiders Crew members. Please join via the Home or About page.");
+                 window.location.href = 'index.html';
+                 return;
+            }
+
+            ChatManager.initGroupChat(user);
+        });
+    </script>
+</body>
+</html>

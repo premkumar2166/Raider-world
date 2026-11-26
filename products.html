@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products & Bikes | Raiders World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-header { padding: 120px 0 60px; text-align: center; background: url('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80') center/cover no-repeat; position: relative; }
+        .page-header::before { content: ''; position: absolute; inset: 0; background: rgba(10,10,13,0.85); }
+        .page-header .container { position: relative; z-index: 1; }
+        .filter-bar { display: flex; gap: 1rem; justify-content: center; margin-bottom: 3rem; flex-wrap: wrap; }
+        .filter-btn { padding: 0.5rem 1.5rem; border: 1px solid var(--border-glass); border-radius: 2rem; background: rgba(255,255,255,0.05); color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; }
+        .filter-btn.active, .filter-btn:hover { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+    </style>
+</head>
+<body class="dark-theme">
+    
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html" class="active">Parts & Bikes</a>
+                <a href="gear.html">Rider Gear</a>
+                <a href="brands.html">Brands</a>
+                <a href="marketplace.html">Buy/Sell Bikes</a>
+                <a href="services.html">Services</a>
+                <a href="scanning.html">Bike Scanning</a>
+                <a href="tracker.html">Bike Location</a>
+                <a href="about.html">About</a>
+                <a href="login.html" class="text-accent">Login</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="icon-btn search-trigger" aria-label="Search">
+                    <i data-lucide="search"></i>
+                </button>
+                <div class="profile-container">
+                    <button class="icon-btn profile-btn" id="profileBtn" aria-label="Profile">
+                        <img src="https://via.placeholder.com/32" alt="Profile" class="profile-photo">
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile.html" class="dropdown-item"><i data-lucide="user"></i> My Profile</a>
+                        <a href="#" class="dropdown-item"><i data-lucide="settings"></i> Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="loginBtn"><i data-lucide="log-in"></i> Login</button>
+                        <button class="dropdown-item" id="logoutBtn" style="display: none;"><i data-lucide="log-out"></i> Logout</button>
+                    </div>
+                </div>
+                <a href="cart.html" class="icon-btn cart-btn" aria-label="Cart" style="display: flex; text-decoration: none;">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1 class="hero-title">High Performance <span class="text-accent">Inventory</span></h1>
+                <p class="hero-subtitle" style="margin: 0 auto;">OEM Parts, Aftermarket Upgrades, and Premium Motorcycles.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="exhausts">Exhausts</button>
+                    <button class="filter-btn" data-filter="brakes">Brakes</button>
+                    <button class="filter-btn" data-filter="tyres">Tyres</button>
+                    <button class="filter-btn" data-filter="engine">Engine</button>
+                </div>
+
+                <div class="section-header">
+                    <h2>Performance <span class="text-accent">Parts</span></h2>
+                </div>
+                
+                <div class="grid grid-3">
+                    <!-- Part 1 -->
+                    <div class="card product-card" data-category="exhausts">
+                        <div class="card-image" style="background-image: url('https://th.bing.com/th/id/OIP.CdB2fnGLpDuEegnEXIOjfwHaHa?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Exhaust Systems</div>
+                            <h3 class="card-title">Akrapovič Titanium Slip-On</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Increases power by +4.2 HP. Lightweight titanium construction.</p>
+                            <div class="card-footer">
+                                <span class="price">₹1,250.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="Akrapovič Titanium Slip-On" 
+                                        data-price="1250.00" 
+                                        data-category="Exhaust Systems" 
+                                        data-image="https://images.unsplash.com/photo-1622185124086-162f63d837f8?auto=format&fit=crop&q=80">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 2 -->
+                    <div class="card product-card" data-category="brakes">
+                        <div class="card-image" style="background-image: url('https://tse4.mm.bing.net/th/id/OIP.KOMZkZgy03dm30v3xWe7sgHaHa?rs=1&pid=ImgDetMain&o=7&rm=3');"></div> 
+                        <div class="card-content">
+                            <div class="card-meta">Braking</div>
+                            <h3 class="card-title">Brembo GP4-RX Calipers</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Nickel coating, MotoGP technology for street use.</p>
+                            <div class="card-footer">
+                                <span class="price">₹1,800.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="Brembo GP4-RX Calipers" 
+                                        data-price="1800.00" 
+                                        data-category="Braking" 
+                                        data-image="https://images.unsplash.com/photo-1568772585407-9361f9bfce87?auto=format&fit=crop&q=80">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 3 -->
+                    <div class="card product-card" data-category="tyres">
+                        <div class="card-image" style="background-image: url('https://tse4.mm.bing.net/th/id/OIP.w3pWy1fye7O9YRyc6-O3ggHaE7?rs=1&pid=ImgDetMain&o=7&rm=3');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Tyres</div>
+                            <h3 class="card-title">Pirelli Diablo Supercorsa V3</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Track performance for the road. 120/70 ZR17 Front.</p>
+                            <div class="card-footer">
+                                <span class="price">₹220.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="Pirelli Diablo Supercorsa V3" 
+                                        data-price="220.00" 
+                                        data-category="Tyres" 
+                                        data-image="https://images.unsplash.com/photo-1558980664-2db8c8fa7273?auto=format&fit=crop&q=80">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 4 -->
+                    <div class="card product-card" data-category="suspension">
+                        <div class="card-image" style="background-image: url('https://tse1.mm.bing.net/th/id/OIP.dRGxROfAw7sJLu4AwttXbgHaHU?rs=1&pid=ImgDetMain&o=7&rm=3');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Suspension</div>
+                            <h3 class="card-title">Öhlins FGRT 200 Forks</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Road & Track front fork with NIX 30 cartridge kit.</p>
+                            <div class="card-footer">
+                                <span class="price">₹2,950.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="Öhlins FGRT 200 Forks" 
+                                        data-price="2950.00" 
+                                        data-category="Suspension" 
+                                        data-image="https://images.unsplash.com/photo-1541094367332-90f7a77ea4f9?auto=format&fit=crop&q=80">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 5: Exhausts -->
+                    <div class="card product-card" data-category="exhausts">
+                        <div class="card-image" style="background-image: url('https://tse1.mm.bing.net/th/id/OIP.WedwQdwdk3EN69RNsiG4QwHaHa?w=1280&h=1280&rs=1&pid=ImgDetMain&o=7&rm=3');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Exhausts</div>
+                            <h3 class="card-title">Austin Racing GP1R</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Pure titanium construction with carbon fiber tip. 110dB.</p>
+                            <div class="card-footer">
+                                <span class="price">₹950.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="Austin Racing GP1R" 
+                                        data-price="950.00" 
+                                        data-category="Exhausts" 
+                                        data-image="https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?auto=format&fit=crop&q=80">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 6: Exhausts -->
+                    <div class="card product-card" data-category="exhausts">
+                        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Exhausts</div>
+                            <h3 class="card-title">SC Project CRT Slip-on</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">World Championship replica exhaust. Aggressive sound.</p>
+                            <div class="card-footer">
+                                <span class="price">₹890.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="SC Project CRT Slip-on" 
+                                        data-price="890.00" 
+                                        data-category="Exhausts" 
+                                        data-image="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 7: Brakes -->
+                    <div class="card product-card" data-category="brakes">
+                        <div class="card-image" style="background-image: url('https://cdn.shopify.com/s/files/1/1591/8703/products/bremo-racing-19rcs-corsacorta-rr-radial-brake-master-cylinder-adj-variable-wheelbase_4.jpg?v=1676035696');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Brakes</div>
+                            <h3 class="card-title">Brembo RCS 19 Corsa Corta</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Adjustable ratio master cylinder for track precision.</p>
+                            <div class="card-footer">
+                                <span class="price">₹320.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="Brembo RCS 19 Corsa Corta" 
+                                        data-price="320.00" 
+                                        data-category="Brakes" 
+                                        data-image="https://images.unsplash.com/photo-1517524008697-5a33504d7c71?auto=format&fit=crop&q=80">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 8: Brakes -->
+                    <div class="card product-card" data-category="brakes">
+                        <div class="card-image" style="background-image: url('https://th.bing.com/th/id/OIP.iFtp-9rMIDk38ovHelmANgHaHa?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Brakes</div>
+                            <h3 class="card-title">EBC Double-H Sintered Pads</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">High friction HH rated compound for maximum stopping.</p>
+                            <div class="card-footer">
+                                <span class="price">₹45.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="EBC Double-H Sintered Pads" 
+                                        data-price="45.00" 
+                                        data-category="Brakes" 
+                                        data-image="https://images.unsplash.com/photo-1626880053915-1d4281313e4b?auto=format&fit=crop&q=80">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 9: Tyres -->
+                    <div class="card product-card" data-category="tyres">
+                        <div class="card-image" style="background-image: url('https://cdn-fastly.motorcycle.com/media/2023/05/31/11706670/dunlop-s-new-roadsmart-iv-rolls-in.jpg?size=704x978&nocrop=1');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Tyres</div>
+                            <h3 class="card-title">Michelin Road 6</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Ultimate wet grip and longevity. 180/55 ZR17 Rear.</p>
+                            <div class="card-footer">
+                                <span class="price">₹240.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="Michelin Road 6" 
+                                        data-price="240.00" 
+                                        data-category="Tyres" 
+                                        data-image="https://images.unsplash.com/photo-1578844251758-2f71da645217?auto=format&fit=crop&q=80">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 10: Tyres -->
+                    <div class="card product-card" data-category="tyres">
+                        <div class="card-image" style="background-image: url('https://th.bing.com/th/id/OIP.QkjzEt6NltCi3chq_r9uWAHaE8?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Tyres</div>
+                            <h3 class="card-title">Metzeler Sportec M9 RR</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Supersport performance for daily riding.</p>
+                            <div class="card-footer">
+                                <span class="price">₹210.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="Metzeler Sportec M9 RR" 
+                                        data-price="210.00" 
+                                        data-category="Tyres" 
+                                        data-image="https://images.unsplash.com/photo-1543501235-9831776c527e?auto=format&fit=crop&q=80">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 11: Engine -->
+                    <div class="card product-card" data-category="engine">
+                        <div class="card-image" style="background-image: url('https://th.bing.com/th/id/R.1abfba6a83feb9a7482316a260bcb22e?rik=dt4tuFJPg1ca1Q&riu=http%3a%2f%2fblog.ridersdiscount.com%2fwp-content%2fuploads%2f2013%2f04%2fdynojet_power_commander_v_3-scaled500.jpg&ehk=1lKsOKm7Htan%2bLJ4L1%2bit02ok7dFXkBTart1In2qNBg%3d&risl=&pid=ImgRaw&r=0');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Engine</div>
+                            <h3 class="card-title">Dynojet Power Commander V</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Fuel injection tuning module for optimized mapping.</p>
+                            <div class="card-footer">
+                                <span class="price">₹450.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="Dynojet Power Commander V" 
+                                        data-price="450.00" 
+                                        data-category="Engine" 
+                                        data-image="https://images.unsplash.com/photo-1625043484555-47841a752840?auto=format&fit=crop&q=80">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 12: Engine -->
+                    <div class="card product-card" data-category="engine">
+                        <div class="card-image" style="background-image: url('https://tse1.mm.bing.net/th/id/OIP.GPDzNXP1RpMHapOmEVg-2AHaHa?w=1000&h=1000&rs=1&pid=ImgDetMain&o=7&rm=3');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Engine</div>
+                            <h3 class="card-title">Motul 300V 10W40 (4L)</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">100% Synthetic Ester Core technology racing oil.</p>
+                            <div class="card-footer">
+                                <span class="price">₹85.00</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="Motul 300V 10W40" 
+                                        data-price="85.00" 
+                                        data-category="Engine" 
+                                        data-image="https://tse1.mm.bing.net/th/id/OIP.GPDzNXP1RpMHapOmEVg-2AHaHa?w=1000&h=1000&rs=1&pid=ImgDetMain&o=7&rm=3">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section bg-darker">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Featured <span class="text-accent">Motorcycles</span></h2>
+                </div>
+                <div class="grid grid-2">
+                    <!-- Bike 1 -->
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('https://tse3.mm.bing.net/th/id/OIP.GQPM3QI6Ts3IqPKJf2WxLQHaFj?w=800&h=600&rs=1&pid=ImgDetMain&o=7&rm=3');">
+                            <span class="quality-badge"><i data-lucide="star"></i> Brand New</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>Ducati Panigale V4 S</h3>
+                            <p class="bike-meta">2024 • 0 km • Red</p>
+                            <div class="bike-actions">
+                                <span class="price large">₹32,000</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-outline" onclick="BikeCustomizer.open('Ducati Panigale V4 S', 32000, 'https://tse3.mm.bing.net/th/id/OIP.GQPM3QI6Ts3IqPKJf2WxLQHaFj?w=800&h=600&rs=1&pid=ImgDetMain&o=7&rm=3')">Modify</button>
+                                    <button class="btn btn-primary add-to-cart" data-title="Deposit: Ducati Panigale V4 S" data-price="500" data-image="https://tse3.mm.bing.net/th/id/OIP.GQPM3QI6Ts3IqPKJf2WxLQHaFj?w=800&h=600&rs=1&pid=ImgDetMain&o=7&rm=3">Reserve</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bike 2 -->
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('https://tse3.mm.bing.net/th/id/OIP.0yZSpko0EGJu-cwbxe2CkQHaHa?w=1536&h=1536&rs=1&pid=ImgDetMain&o=7&rm=3');">
+                            <span class="quality-badge"><i data-lucide="check-circle"></i> Certified Pre-Owned</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>KTM 1290 Super Duke R</h3>
+                            <p class="bike-meta">2021 • 12,500 km • Black/Orange</p>
+                            <div class="bike-actions">
+                                <span class="price large">₹55,000</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-outline" onclick="BikeCustomizer.open('KTM 1290 Super Duke R', 55000, 'https://tse3.mm.bing.net/th/id/OIP.0yZSpko0EGJu-cwbxe2CkQHaHa?w=1536&h=1536&rs=1&pid=ImgDetMain&o=7&rm=3')">Modify</button>
+                                    <button class="btn btn-primary add-to-cart" data-title="Deposit: KTM 1290 Super Duke R" data-price="500" data-image="https://tse3.mm.bing.net/th/id/OIP.0yZSpko0EGJu-cwbxe2CkQHaHa?w=1536&h=1536&rs=1&pid=ImgDetMain&o=7&rm=3">Reserve</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+                </a>
+                <p>Establishing the gold standard in biking gear, services, and community since 1954.</p>
+            </div>
+        </div>
+        <div class="footer-bottom container">
+            <p>&copy; 2026 Raiders World. Built with passion.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Load Dynamic Products from Owner Portal
+            const products = JSON.parse(localStorage.getItem('raiders_products')) || [];
+            const partsGrid = document.querySelector('.grid.grid-3');
+            
+            // Filter for items categorized as 'parts'
+            const dynamicParts = products.filter(p => p.category === 'parts');
+            
+            dynamicParts.forEach(product => {
+                const html = `
+                    <div class="card product-card" data-category="parts">
+                        <div class="card-image" style="background-image: url('${product.image}');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Custom Inventory</div>
+                            <h3 class="card-title">${product.title}</h3>
+                            <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Premium aftermarket component.</p>
+                            <div class="card-footer">
+                                <span class="price">₹${product.price.toFixed(2)}</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" 
+                                        data-title="${product.title}" 
+                                        data-price="${product.price}" 
+                                        data-category="parts" 
+                                        data-image="${product.image}">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                // Append to grid at the top
+                partsGrid.insertAdjacentHTML('afterbegin', html);
+            });
+
+            // Re-initialize icons for new elements
+            if (window.lucide) lucide.createIcons();
+
+            // 2. Initialize Filter Logic (Updated to handle dynamic elements)
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update Active Button
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const filterValue = btn.getAttribute('data-filter');
+                    
+                    // Re-query cards to include dynamically added ones
+                    const currentCards = document.querySelectorAll('.product-card');
+                    
+                    currentCards.forEach(card => {
+                        const category = card.getAttribute('data-category');
+                        // Show if 'all' or matches specific category. 
+                        // Dynamic parts have category 'parts', so they will show on 'all'
+                        if (filterValue === 'all' || category === filterValue) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

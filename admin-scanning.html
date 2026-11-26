@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanning Analysis | Owner Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body { margin: 0; padding: 0; display: flex; min-height: 100vh; background-color: #0b0b0e; color: var(--text-primary); }
+        .sidebar { width: 280px; background: rgba(10,10,13,0.98); border-right: 1px solid var(--border-glass); padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 2rem; position: fixed; height: 100vh; z-index: 10; }
+        .main-content { margin-left: 280px; padding: 2rem 3rem; flex: 1; min-height: 100vh; overflow-y: auto; }
+        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; color: var(--text-secondary); text-decoration: none; border-radius: 0.5rem; transition: var(--transition); }
+        .nav-item:hover, .nav-item.active { background: rgba(245, 158, 11, 0.1); color: var(--accent-color); border-left: 3px solid var(--accent-color); }
+        .panel { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-glass); border-radius: 1rem; padding: 1.5rem; backdrop-filter: blur(10px); }
+        .stat-card { display: flex; align-items: center; gap: 1rem; }
+        .stat-icon { width: 48px; height: 48px; border-radius: 50%; background: rgba(59, 130, 246, 0.1); display: flex; align-items: center; justify-content: center; color: #3b82f6; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th { text-align: left; padding: 1rem; border-bottom: 2px solid var(--border-glass); color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; }
+        td { padding: 1rem; border-bottom: 1px solid var(--border-glass); font-size: 0.9rem; }
+        .model-tag { background: rgba(245, 158, 11, 0.15); color: var(--accent-color); padding: 0.2rem 0.5rem; border-radius: 0.4rem; font-weight: 600; }
+    </style>
+</head>
+<body class="dark-theme carbon-fiber">
+    <aside class="sidebar">
+        <a href="index.html" class="logo" style="margin-bottom: 2rem;">
+            <span class="logo-text">OWNER</span><span class="logo-accent">PORTAL</span>
+        </a>
+        <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <a href="admin.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Control Center</a>
+            <a href="admin-orders.html" class="nav-item"><i data-lucide="shopping-cart"></i> Sales & Orders</a>
+            <a href="admin-inventory.html" class="nav-item"><i data-lucide="package-plus"></i> Store Inventory</a>
+            <a href="admin-otp.html" class="nav-item"><i data-lucide="shield-alert"></i> OTP Tracking Logs</a>
+            <a href="admin-dispatch.html" class="nav-item"><i data-lucide="truck"></i> Service Dispatch</a>
+            <a href="admin-engine.html" class="nav-item"><i data-lucide="file-check"></i> Transparency Engine</a>
+            <a href="admin-scanning.html" class="nav-item active"><i data-lucide="scan"></i> Scanning Analysis</a>
+            <a href="admin-mechanics.html" class="nav-item"><i data-lucide="users"></i> Mechanic Applications</a>
+            <a href="admin-chat.html" class="nav-item"><i data-lucide="message-square"></i> Crew Hub Chat</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem; font-weight: 800;">Scanning Analysis</h1>
+                <p class="text-secondary" style="font-size: 1.1rem;">Monitor AI-driven component identification and popular bike models.</p>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-outline"><i data-lucide="download"></i> Export Data</button>
+                <div class="panel" style="padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; border-color: #10b981;">
+                    <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;" class="pulse"></div>
+                    <span style="color: #10b981; font-weight: 600;">Neural Node Online</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
+            <div class="panel stat-card">
+                <div class="stat-icon"><i data-lucide="zap"></i></div>
+                <div>
+                    <h3 id="statTotalScans" style="font-size: 1.8rem; margin-bottom: 0.2rem; font-weight: 700;">0</h3>
+                    <p class="text-secondary" style="font-size: 0.9rem;">Total Scans (All Time)</p>
+                </div>
+            </div>
+            <div class="panel stat-card">
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;"><i data-lucide="award"></i></div>
+                <div>
+                    <h3 id="statAvgConfidence" style="font-size: 1.8rem; margin-bottom: 0.2rem; font-weight: 700;">0%</h3>
+                    <p class="text-secondary" style="font-size: 0.9rem;">Average AI Confidence Score</p>
+                </div>
+            </div>
+            <div class="panel stat-card">
+                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--accent-color);"><i data-lucide="trending-up"></i></div>
+                <div>
+                    <h3 id="statMostScanned" style="font-size: 1.8rem; margin-bottom: 0.2rem; font-weight: 700;">N/A</h3>
+                    <p class="text-secondary" style="font-size: 0.9rem;">Most Scanned Asset</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="history"></i> Recent Scan Log</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Identified Model</th>
+                        <th>User Status</th>
+                        <th>Detected Parts</th>
+                        <th>Confidence</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="scanLogBody">
+                    <!-- Data will be injected here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="panel">
+                <h3 style="margin-bottom: 1rem;"><i data-lucide="pie-chart"></i> Component Popularity</h3>
+                <p class="text-secondary">Distribution of identified aftermarket parts across all scans.</p>
+                <div style="height: 200px; display: flex; align-items: center; justify-content: center; border: 1px dashed var(--border-glass); border-radius: 0.5rem; margin-top: 1rem;">
+                    [Interactive Chart Placeholder]
+                </div>
+            </div>
+            <div class="panel">
+                <h3 style="margin-bottom: 1rem;"><i data-lucide="map"></i> Global Scanning Heatmap</h3>
+                <p class="text-secondary">Origin of scanning requests over the last 24 hours.</p>
+                <div style="height: 200px; display: flex; align-items: center; justify-content: center; border: 1px dashed var(--border-glass); border-radius: 0.5rem; margin-top: 1rem; background: url('https://images.unsplash.com/photo-1524661135-42353a238698?auto=format&fit=crop&q=80') center/cover; opacity: 0.4;">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            AdminScanningManager.init();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Raiders World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-header { padding: 120px 0 60px; text-align: center; background: url('https://images.unsplash.com/photo-1517409458230-05041005a306?auto=format&fit=crop&q=80') center/cover no-repeat; position: relative; }
+        .page-header::before { content: ''; position: absolute; inset: 0; background: rgba(10,10,13,0.85); }
+        .page-header .container { position: relative; z-index: 1; }
+        
+        .history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .vintage-photo { 
+            width: 100%; height: 400px; 
+            background: url('https://images.unsplash.com/photo-1596568940868-b7c1266e778b?auto=format&fit=crop&q=80') center/cover;
+            border-radius: 1rem; border: 4px solid var(--border-glass); 
+            filter: sepia(0.6) contrast(1.2);
+        }
+        @media(max-width: 768px) { .history-grid { grid-template-columns: 1fr; gap: 2rem; } }
+    </style>
+</head>
+<body class="dark-theme">
+    <script>
+        // Check if user is logged in, if not redirect to login page
+        function checkLogin() {
+            const user = localStorage.getItem('raiders_user');
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        }
+        checkLogin();
+    </script>
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Parts & Bikes</a>
+                <a href="gear.html">Rider Gear</a>
+                <a href="marketplace.html">Buy/Sell Bikes</a>
+                <a href="services.html">Services</a>
+                <a href="scanning.html">Bike Scanning</a>
+                <a href="tracker.html" class="text-accent">Bike Location</a>
+                <a href="about.html">About</a>
+                <a href="login.html" class="text-accent">Login</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="icon-btn" aria-label="Search"><i data-lucide="search"></i></button>
+                <div class="profile-container">
+                    <button class="icon-btn profile-btn" id="profileBtn" aria-label="Profile">
+                        <img src="https://via.placeholder.com/32" alt="Profile" class="profile-photo">
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i data-lucide="user"></i> My Profile
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i data-lucide="settings"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="loginBtn">
+                            <i data-lucide="log-in"></i> Login
+                        </button>
+                        <button class="dropdown-item" id="logoutBtn" style="display: none;">
+                            <i data-lucide="log-out"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                <a href="cart.html" class="icon-btn cart-btn" aria-label="Cart" style="display: flex; text-decoration: none;">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1 class="hero-title">Our <span class="text-accent">Legacy</span></h1>
+                <p class="hero-subtitle" style="margin: 0 auto;">70 Years of untamed passion for the open road.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="history-grid">
+                    <div class="vintage-photo"></div>
+                    <div>
+                        <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">How It Started in 1954</h2>
+                        <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem;">
+                            Before it was an empire, it was a tiny garage.
+                            Back in the day, taking a wrench to a bike meant putting your soul into the metal. 
+                            Raiders World was founded on a simple principle: 100% Honesty. When you buy a bike from us or have one repaired,
+                            you get 70 years of generational mastery behind it.
+                        </p>
+                        <div class="trust-container" style="grid-template-columns: 1fr; gap: 1rem;">
+                            <div class="trust-item" style="justify-content: flex-start;">
+                                <i data-lucide="map-pin"></i>
+                                <div>
+                                    <h4>Headquarters Location</h4>
+                                    <p class="text-secondary">Sothupakkam, Balaji Nagar First St</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shop Locator Map -->
+        <section class="section bg-darker" id="locator">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Visit Our <span class="text-accent">Headquarters</span></h2>
+                    <p class="section-desc">Experience the 70-year legacy in person.</p>
+                </div>
+                <div class="glass-panel" style="padding: 1rem;">
+                    <!-- Embedded Interactive Google Map Custom Location -->
+                    <iframe src="https://maps.google.com/maps?q=12.436803,79.830794&z=15&output=embed" width="100%" height="450" style="border:0; border-radius: 0.5rem;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <div class="grid grid-3" style="margin-top: 2rem;">
+                    <div class="trust-item" style="justify-content: flex-start; background: var(--bg-surface); padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--border-glass);">
+                        <i data-lucide="map-pin" class="accent-icon"></i>
+                        <div>
+                            <h4>Address</h4>
+                            <p class="text-secondary">Sothupakkam, Balaji Nagar First St</p>
+                        </div>
+                    </div>
+                    <div class="trust-item" style="justify-content: flex-start; background: var(--bg-surface); padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--border-glass);">
+                        <i data-lucide="clock" class="accent-icon"></i>
+                        <div>
+                            <h4>Workshop Hours</h4>
+                            <p class="text-secondary">Mon-Sat: 9AM - 8PM<br>Sun: Closed (Ride Day)</p>
+                        </div>
+                    </div>
+                    <div class="trust-item" style="justify-content: flex-start; background: var(--bg-surface); padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--border-glass);">
+                        <i data-lucide="phone" class="accent-icon"></i>
+                        <div>
+                            <h4 style="margin-bottom: 0px;">Contact Support</h4>
+                            <p class="text-secondary">8220928214<br>glider@raidersworld.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Raiders Club & Mechanics Join -->
+        <section class="club-section carbon-fiber">
+            <div class="container">
+                <div class="club-content glass-panel" style="max-width: 800px;">
+                    <h2>Join the <span class="text-accent">Raiders Crew</span></h2>
+                    <p>Enthusiasts, Riders, and Mechanics—become part of our 70-year legacy. Upload your resume or contact details to join our master mechanics team.</p>
+                    <form onsubmit="event.preventDefault(); alert('Application Submitted Securely!');" style="margin-top: 2rem; text-align: left;">
+                        <div class="input-group">
+                            <input type="text" placeholder="Full Name" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" placeholder="Email Address" required>
+                        </div>
+                        <div class="input-group" style="background: rgba(0,0,0,0.3); border: 1px dashed var(--border-glass); padding: 2rem; text-align: center; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                            <i data-lucide="upload-cloud" style="margin-bottom: 1rem; color: var(--text-secondary); width: 48px; height: 48px; display: inline-block;"></i>
+                            <p class="text-secondary">Drag and drop your Resume/CV here</p>
+                            <input type="file" accept=".pdf,.doc,.docx" style="display: none;" id="resumeUpload">
+                            <label for="resumeUpload" class="btn btn-outline" style="margin-top: 1rem; cursor: pointer; display: inline-block;">Browse Files</label>
+                        </div>
+                        <button class="btn btn-primary full-width" type="submit">Submit Application</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer bg-darker">
+        <div class="footer-bottom container" style="margin-top:0">
+            <p>&copy; 2026 Raiders World.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeLoginModal">&times;</button>
+            <h2>Welcome Back</h2>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Login</button>
+                <p class="form-footer">Don't have an account? <a href="#" class="text-accent">Sign up here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

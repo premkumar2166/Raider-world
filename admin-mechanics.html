@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanics | Raiders World Owner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body { margin: 0; padding: 0; display: flex; min-height: 100vh; background-color: #0b0b0e; color: var(--text-primary); }
+        .sidebar { width: 280px; background: rgba(10,10,13,0.98); border-right: 1px solid var(--border-glass); padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 2rem; position: fixed; height: 100vh; z-index: 10; }
+        .main-content { margin-left: 280px; padding: 2rem 3rem; flex: 1; min-height: 100vh; overflow-y: auto; }
+        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; color: var(--text-secondary); text-decoration: none; border-radius: 0.5rem; transition: var(--transition); }
+        .nav-item:hover, .nav-item.active { background: rgba(245, 158, 11, 0.1); color: var(--accent-color); border-left: 3px solid var(--accent-color); }
+        .panel { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-glass); border-radius: 1rem; padding: 1.5rem; backdrop-filter: blur(10px); display: flex; flex-direction: column; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        
+        .avatar { width: 60px; height: 60px; border-radius: 50%; background: rgba(245, 158, 11, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent-color); font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
+    </style>
+</head>
+<body class="dark-theme carbon-fiber">
+
+    <aside class="sidebar">
+        <a href="index.html" class="logo" style="margin-bottom: 2rem;">
+            <span class="logo-text">OWNER</span><span class="logo-accent">PORTAL</span>
+        </a>
+        <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <a href="admin.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Control Center</a>
+            <a href="admin-orders.html" class="nav-item"><i data-lucide="shopping-cart"></i> Sales & Orders</a>
+            <a href="admin-inventory.html" class="nav-item"><i data-lucide="package-plus"></i> Store Inventory</a>
+            <a href="admin-otp.html" class="nav-item"><i data-lucide="shield-alert"></i> OTP Tracking Logs</a>
+            <a href="admin-dispatch.html" class="nav-item"><i data-lucide="truck"></i> Service Dispatch</a>
+            <a href="admin-engine.html" class="nav-item"><i data-lucide="file-check"></i> Transparency Engine</a>
+            <a href="admin-scanning.html" class="nav-item"><i data-lucide="scan"></i> Scanning Analysis</a>
+            <a href="admin-mechanics.html" class="nav-item active"><i data-lucide="users"></i> Mechanic Applications</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem;">Mechanic Recruitment Engine</h1>
+        <p class="text-secondary" style="margin-bottom: 2rem;">Review applications submitted directly from the Raiders Club portal.</p>
+
+        <div class="dashboard-grid">
+            <!-- Applicant 1 -->
+            <div class="panel">
+                <div class="avatar">DT</div>
+                <h3 style="font-size: 1.4rem; margin-bottom: 0.2rem;">David Thompson</h3>
+                <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Experience: <strong>8 Years</strong> • Spl: Superbikes</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                    <i data-lucide="file-text" style="color: var(--accent-color);"></i>
+                    <div style="flex: 1;">
+                        <p style="margin: 0; font-size: 0.9rem; font-weight: 600;">David_Resume_2026.pdf</p>
+                        <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">2.4 MB</p>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: auto;">
+                    <button class="btn btn-primary" onclick="alert('Applicant Approved & Notified!')">Approve</button>
+                    <button class="btn btn-outline" style="border-color: #ef4444; color: #ef4444;" onclick="alert('Application Archived.')">Reject</button>
+                </div>
+            </div>
+
+            <!-- Applicant 2 -->
+             <div class="panel">
+                <div class="avatar" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">MJ</div>
+                <h3 style="font-size: 1.4rem; margin-bottom: 0.2rem;">Marcus Johnson</h3>
+                <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Experience: <strong>2 Years</strong> • Spl: Cruisers</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                    <i data-lucide="file-text" style="color: #3b82f6;"></i>
+                    <div style="flex: 1;">
+                        <p style="margin: 0; font-size: 0.9rem; font-weight: 600;">Marcus_CV_Updated.pdf</p>
+                        <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">1.1 MB</p>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: auto;">
+                    <button class="btn btn-primary" onclick="alert('Applicant Approved & Notified!')">Approve</button>
+                    <button class="btn btn-outline" style="border-color: #ef4444; color: #ef4444;" onclick="alert('Application Archived.')">Reject</button>
+                </div>
+            </div>
+            
+            <!-- Applicant 3 -->
+             <div class="panel">
+                <div class="avatar" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">AR</div>
+                <h3 style="font-size: 1.4rem; margin-bottom: 0.2rem;">Alex Rodriguez</h3>
+                <p class="text-secondary" style="font-size: 0.9rem; margin-bottom: 1rem;">Experience: <strong>12 Years</strong> • Spl: Engine Rebuilds</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                    <i data-lucide="file-text" style="color: #10b981;"></i>
+                    <div style="flex: 1;">
+                        <p style="margin: 0; font-size: 0.9rem; font-weight: 600;">Alex_Master_Mechanic.pdf</p>
+                        <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">3.5 MB</p>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: auto;">
+                    <button class="btn btn-primary" onclick="alert('Applicant Approved & Notified!')">Approve</button>
+                    <button class="btn btn-outline" style="border-color: #ef4444; color: #ef4444;" onclick="alert('Application Archived.')">Reject</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

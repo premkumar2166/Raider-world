@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raiders World | Premium Bike Services & Gear</title>
+    <meta name="description" content="Raiders World - 70 years of excellence in bike products, rider gear, new and second-hand marketplace, and premium repair services.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #homeMap {
+            width: 100%;
+            height: 200px;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(245,158,11,0.3);
+            z-index: 0;
+            margin-top: 1rem;
+        }
+        .leaflet-tile-container img { filter: brightness(0.75) saturate(0.6); }
+        .leaflet-container { background: #0a0a0d; }
+        .home-tracker-popup .leaflet-popup-content-wrapper {
+            background: #14141a;
+            color: #f8fafc;
+            border: 1px solid rgba(245,158,11,0.3);
+            border-radius: 0.75rem;
+            font-size: 0.85rem;
+        }
+        .home-tracker-popup .leaflet-popup-tip { background: #14141a; }
+    </style>
+</head>
+<body class="dark-theme">
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="products.html">Parts & Bikes</a>
+                <a href="gear.html">Rider Gear</a>
+                <a href="brands.html">Brands</a>
+                <a href="marketplace.html">Buy/Sell Bikes</a>
+                <a href="services.html">Services</a>
+                <a href="scanning.html">Bike Scanning</a>
+                <a href="tracker.html">Bike Location</a>
+                <a href="about.html">About</a>
+                <a href="chat.html" id="navChatLink" style="display: none;">Crew Chat</a>
+                <a href="login.html" class="text-accent">Login</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="icon-btn search-trigger" aria-label="Search">
+                    <i data-lucide="search"></i>
+                </button>
+                <div class="profile-container">
+                    <button class="icon-btn profile-btn" id="profileBtn" aria-label="Profile">
+                        <img src="https://via.placeholder.com/32" alt="Profile" class="profile-photo">
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i data-lucide="user"></i> My Profile
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i data-lucide="settings"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="loginBtn">
+                            <i data-lucide="log-in"></i> Login
+                        </button>
+                        <button class="dropdown-item" id="logoutBtn" style="display: none;">
+                            <i data-lucide="log-out"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                <a href="cart.html" class="icon-btn cart-btn" aria-label="Cart" style="display: flex; text-decoration: none;">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <div class="hero-text">
+                    <span class="badge">Est. 1954 - 70 Years of Excellence</span>
+                    <h1 class="hero-title">Rule The Road. <br>Command The <span class="text-accent">Journey.</span></h1>
+                    <p class="hero-subtitle">The ultimate destination for premium new/used bikes, elite rider gear, and unmatched 24/7 repair services.</p>
+                    <div class="hero-cta">
+                        <button class="btn btn-primary" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); document.getElementById('regNo').focus()">Track Your Bike</button>
+                        <button class="btn btn-secondary" onclick="joinRaidersCrew()">Join the Raiders Crew</button>
+                        <button class="btn btn-outline" style="border-color: var(--accent-color); color: var(--accent-color);" onclick="openModifyModal()">Modify My Bike</button>
+                        <button class="btn btn-outline" onclick="openCallbackModal()">Request Call Back</button>
+                    </div>
+                </div>
+
+                <!-- Floating Tracker UI Widget -->
+                <div class="tracker-widget glass-panel">
+                    <div class="tracker-header">
+                        <i data-lucide="map-pin" class="accent-icon"></i>
+                        <h3>Track Your Bike</h3>
+                    </div>
+                    <p class="tracker-desc">Enter your Registration Number & OTP to check live repair status.</p>
+                    <form id="trackerForm" class="tracker-form">
+                        <div class="input-group">
+                            <input type="text" id="regNo" placeholder="e.g. MH-12-AB-1234" required autocomplete="off">
+                        </div>
+                        <div class="input-group otp-group hidden" id="otpGroup">
+                            <input type="text" id="otpCode" placeholder="Enter Secure OTP" autocomplete="off">
+                        </div>
+                        <button type="submit" class="btn btn-primary full-width" id="trackerBtn">Send OTP</button>
+                    </form>
+
+                    <div id="trackingResult" class="tracking-result hidden">
+                        <!-- Progress Steps -->
+                        <div style="display:flex;justify-content:space-between;margin-bottom:1.25rem;position:relative;padding:0 8px;">
+                            <div style="position:absolute;top:14px;left:36px;right:36px;height:2px;background:rgba(255,255,255,0.1);z-index:0;">
+                                <div id="homeProgressFill" style="height:100%;background:var(--accent-color);width:66%;transition:width 1s ease;"></div>
+                            </div>
+                            <div style="text-align:center;position:relative;z-index:1;">
+                                <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-color);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 0.3rem;"><i data-lucide="check" style="width:13px;"></i></div>
+                                <span style="font-size:0.7rem;color:var(--text-primary);">Assigned</span>
+                            </div>
+                            <div style="text-align:center;position:relative;z-index:1;">
+                                <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-color);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 0.3rem;"><i data-lucide="package" style="width:13px;"></i></div>
+                                <span style="font-size:0.7rem;color:var(--text-primary);">Picked Up</span>
+                            </div>
+                            <div style="text-align:center;position:relative;z-index:1;">
+                                <div style="width:28px;height:28px;border-radius:50%;background:var(--bg-surface);border:2px solid var(--accent-color);display:flex;align-items:center;justify-content:center;margin:0 auto 0.3rem;"><div class="pulse" style="width:7px;height:7px;"></div></div>
+                                <span style="font-size:0.7rem;color:var(--accent-color);font-weight:600;">In Transit</span>
+                            </div>
+                            <div style="text-align:center;position:relative;z-index:1;">
+                                <div style="width:28px;height:28px;border-radius:50%;background:var(--bg-surface);border:1px solid var(--border-glass);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;margin:0 auto 0.3rem;"><i data-lucide="map-pin" style="width:13px;"></i></div>
+                                <span style="font-size:0.7rem;color:var(--text-secondary);">Arriving</span>
+                            </div>
+                        </div>
+
+                        <!-- ETA + Rider -->
+                        <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.03);padding:1rem;border-radius:0.75rem;margin-bottom:0.5rem;">
+                            <div>
+                                <span style="display:block;color:var(--text-secondary);font-size:0.75rem;">Estimated Arrival</span>
+                                <h3 id="homeCountdown" style="font-size:1.6rem;color:var(--accent-color);margin:0;">25 mins</h3>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:0.6rem;">
+                                <div style="width:38px;height:38px;border-radius:50%;background:var(--accent-color);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:#fff;box-shadow:0 4px 12px rgba(245,158,11,0.35);">M</div>
+                                <div>
+                                    <p style="font-weight:700;font-size:0.9rem;margin:0;">Mike</p>
+                                    <p style="font-size:0.72rem;color:var(--text-secondary);margin:0;">Premium Rider</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Real Leaflet Map -->
+                        <div id="homeMap"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Value Prop -->
+        <section class="trust-ribbon carbon-fiber">
+            <div class="container trust-container">
+                <div class="trust-item">
+                    <i data-lucide="shield-check"></i>
+                    <div class="trust-text">
+                        <h4>70 Years Legacy</h4>
+                        <p>Trusted generation to generation.</p>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <i data-lucide="clock"></i>
+                    <div class="trust-text">
+                        <h4>24/7 Support</h4>
+                        <p>We're here whenever you ride.</p>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <i data-lucide="wrench"></i>
+                    <div class="trust-text">
+                        <h4>1-Year Warranty</h4>
+                        <p>On all premium repairs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="section" id="gear">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Elite <span class="text-accent">Rider Gear</span></h2>
+                    <a href="#" class="view-all">View Catalog <i data-lucide="arrow-right"></i></a>
+                </div>
+                <div class="grid grid-3">
+                    <div class="card product-card">
+                        <div class="card-image helmet-img"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Premium Helmets</div>
+                            <h3 class="card-title">Axor Apex V2</h3>
+                            <div class="card-footer">
+                                <span class="price">₹12,500</span>
+                                <div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Axor Apex V2" data-price="12500" data-category="Premium Helmets" data-image="https://m.media-amazon.com/images/S/aplus-media-library-service-media/eda0149e-25bf-489e-93bb-1d80aa98dbd3.__CR0,0,970,600_PT0_SX970_V1___.jpg"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card product-card">
+                        <div class="card-image jacket-img"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Riding Jackets</div>
+                            <h3 class="card-title">Rynox Stealth Evo</h3>
+                            <div class="card-footer">
+                                <span class="price">₹18,500</span>
+                                <div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Rynox Stealth Evo" data-price="18500" data-category="Riding Jackets" data-image="https://images.unsplash.com/photo-1520975661595-6453be3f7070?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card product-card">
+                        <div class="card-image accessories-img"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Tech Gadgets</div>
+                            <h3 class="card-title">Quad Lock Mount Pro</h3>
+                            <div class="card-footer">
+                                <span class="price">₹4,999</span>
+                                <div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Quad Lock Mount Pro" data-price="4999" data-category="Tech Gadgets" data-image="https://m.media-amazon.com/images/I/61fPSInDU9L._AC_SL1500_.jpg"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Second Hand Marketplace -->
+        <section class="section bg-darker" id="bikes">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Certified <span class="text-accent">Pre-Owned</span></h2>
+                    <p class="section-desc">100% Honest Quality & Damage Reports Available</p>
+                </div>
+                <div class="grid grid-2">
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image used-bike-1">
+                            <span class="quality-badge"><i data-lucide="check-circle"></i> A-Grade Condition</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>Royal Enfield Classic 350</h3>
+                            <p class="bike-meta">2021 • 14,000 km • Single Owner</p>
+                            <div class="bike-actions">
+                                <span class="price large">₹1,50,000</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <!-- Modify button removed for Royal Enfield Classic 350 -->
+                                    <button class="btn btn-primary add-to-cart" data-title="Reservation: Royal Enfield Classic 350" data-price="1000" data-image="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?auto=format&fit=crop&q=80">Reserve</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('https://bd.gaadicdn.com/processedimages/ktm/ktm-duke-390/source/v_duke-390-std1528454016.jpg');">
+                            <span class="quality-badge warning"><i data-lucide="alert-circle"></i> Minor Scratches</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>KTM Duke 390</h3>
+                            <p class="bike-meta">2020 • 22,000 km • Fully Serviced</p>
+                            <div class="bike-actions">
+                                <span class="price large">₹2,10,000</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <!-- Modify button removed for KTM Duke 390 -->
+                                    <button class="btn btn-primary add-to-cart" data-title="Reservation: KTM Duke 390" data-price="1000" data-image="https://bd.gaadicdn.com/processedimages/ktm/ktm-duke-390/source/v_duke-390-std1528454016.jpg">Reserve</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Raiders Club -->
+        <section class="club-section" id="about">
+            <div class="container">
+                <div class="club-content glass-panel">
+                    <h2>Join the <span class="text-accent">Raiders Club</span></h2>
+                    <p>Become part of our 70-year legacy. Connect with fellow riders, share experiences, and get direct access to our tech team.</p>
+                    <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="joinRaidersCrew()">Join the Riders Crew – Become a Member</button>
+                        <button class="btn btn-secondary" onclick="window.location.href='chat.html'"><i data-lucide="message-square" style="margin-right: 8px;"></i> Riders Crew Chat</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Future Vision Section -->
+        <section class="section future-vision" id="future">
+            <div class="container">
+                <div class="section-header" style="flex-direction: column; align-items: center; text-align: center; width: 100%;">
+                    <span class="badge">Future Concepts</span>
+                    <h2 class="glow-text">The <span class="text-accent">Raiders</span> Revolution</h2>
+                    <p class="section-desc">Exploring the frontier of electromagnetic levitation. Built for the riders of 2050.</p>
+                </div>
+                <div class="future-grid">
+                    <div class="concept-card">
+                        <div class="concept-image" style="background-image: url('https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/22-yamaha-motorcycle-future-concept-art-tim-hill.jpg')"></div>
+                        <div class="concept-info">
+                            <h3>Factory Prototype</h3>
+                            <p>A hyper-realistic look at our first EM-enabled chassis. 12-inch hover height with Ohlins integration.</p>
+                        </div>
+                    </div>
+                    <div class="concept-card">
+                        <div class="concept-image" style="background-image: url('https://img.freepik.com/premium-photo/futuristic-motorcycle-with-glowing-wheels-neon-lights_14117-782770.jpg')"></div>
+                        <div class="concept-info">
+                            <h3>Urban Mobility</h3>
+                            <p>Optimized for neon-lit streetscapes, featuring dual-ion thrusters for pinpoint city navigation.</p>
+                        </div>
+                    </div>
+                    <div class="concept-card">
+                        <div class="concept-image" style="background-image: url('https://img.freepik.com/premium-photo/futuristic-tech-futuristic-design_729149-7719.jpg')"></div>
+                        <div class="concept-info">
+                            <h3>The Core Tech</h3>
+                            <p>An exploded view of our proprietary levitation plates and high-density energy cores.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Call Widget -->
+    <a href="tel:+918220928214" class="fab-call" aria-label="Call Us Now">
+        <i data-lucide="phone-call"></i>
+    </a>
+
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+                </a>
+                <p>Establishing the gold standard in biking gear, services, and community since 1954.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Shop Parts</a></li>
+                    <li><a href="#">Rider Gear</a></li>
+                    <li><a href="#">Second-Hand Bikes</a></li>
+                    <li><a href="#">Our Heritage</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Track Bike Service</a></li>
+                    <li><a href="#">Shop Locator</a></li>
+                    <li><a href="#">Warranty Claims</a></li>
+                    <li><a href="#">24/7 Help Desk</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom container">
+            <p>&copy; 2026 Raiders World. Built with passion.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeLoginModal">&times;</button>
+            <h2>Welcome Back</h2>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Login</button>
+                <p class="form-footer">Don't have an account? <a href="#" class="text-accent">Sign up here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Callback Request Modal -->
+    <div class="modal" id="callbackModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeCallbackModal">&times;</button>
+            <h2>Request a Call Back</h2>
+            <p>Leave your details and we'll call you back within 24 hours!</p>
+            <form id="callbackForm" class="login-form">
+                <div class="form-group">
+                    <label for="callbackName">Name</label>
+                    <input type="text" id="callbackName" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="callbackPhone">Phone Number</label>
+                    <input type="tel" id="callbackPhone" placeholder="+91 XXXXX XXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label for="callbackMessage">Message (Optional)</label>
+                    <textarea id="callbackMessage" placeholder="Brief message about your inquiry..." rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Request Call Back</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modify My Bike Modal -->
+    <div class="modal" id="modifyModal">
+        <div class="modal-content glass-panel" style="max-width: 800px; display: block;">
+            <div class="modal-header">
+                <h2>Request <span class="text-accent">Custom Modification</span></h2>
+                <button class="icon-btn" onclick="document.getElementById('modifyModal').classList.remove('show')"><i data-lucide="x"></i></button>
+            </div>
+            <p class="text-secondary" style="margin-bottom: 1.5rem;">Upload your bike and select the parts you wish to modify.</p>
+            
+            <form id="modifyBikeForm" onsubmit="ModifyManager.submitRequest(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <div class="input-group">
+                            <label style="display:block; margin-bottom: 0.5rem;">Upload Your Bike Photo</label>
+                            <input type="file" id="modifyBikePhoto" accept="image/*" required style="width:100%; padding: 0.8rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05); border: 1px dashed var(--border-glass);">
+                        </div>
+                        <div class="input-group">
+                            <label style="display:block; margin-bottom: 0.5rem;">Bike Model & Year</label>
+                            <input type="text" id="modifyBikeModel" placeholder="e.g. Yamaha R15 2022" required style="width:100%; padding: 0.8rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color:white;">
+                        </div>
+                        <div class="input-group">
+                            <label style="display:block; margin-bottom: 0.5rem;">Questions & Vision for Change</label>
+                            <textarea id="modifyDescription" placeholder="Type your questions directly to the owner here..." style="width:100%; padding: 0.8rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color:white; min-height: 100px;"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: bold;">Select Parts to Modify:</label>
+                        <div class="modify-checklist" style="max-height: 300px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 0.5rem;">
+                            <!-- 20 Parts List -->
+                            <label class="check-item"><input type="checkbox" value="Engine"> Engine</label>
+                            <label class="check-item"><input type="checkbox" value="Fuel Tank"> Fuel Tank</label>
+                            <label class="check-item"><input type="checkbox" value="Frame"> Frame (Chassis)</label>
+                            <label class="check-item"><input type="checkbox" value="Front Forks"> Front Forks</label>
+                            <label class="check-item"><input type="checkbox" value="Handlebars"> Handlebars</label>
+                            <label class="check-item"><input type="checkbox" value="Throttle"> Throttle</label>
+                            <label class="check-item"><input type="checkbox" value="Clutch Lever"> Clutch Lever</label>
+                            <label class="check-item"><input type="checkbox" value="Gear Shifter"> Gear Shifter</label>
+                            <label class="check-item"><input type="checkbox" value="Front Brake Lever"> Front Brake Lever</label>
+                            <label class="check-item"><input type="checkbox" value="Rear Brake Pedal"> Rear Brake Pedal</label>
+                            <label class="check-item"><input type="checkbox" value="Wheels"> Wheels</label>
+                            <label class="check-item"><input type="checkbox" value="Tires"> Tires</label>
+                            <label class="check-item"><input type="checkbox" value="Suspension"> Suspension</label>
+                            <label class="check-item"><input type="checkbox" value="Exhaust System"> Exhaust System</label>
+                            <label class="check-item"><input type="checkbox" value="Chain and Sprocket"> Chain and Sprocket</label>
+                            <label class="check-item"><input type="checkbox" value="Seat"> Seat</label>
+                            <label class="check-item"><input type="checkbox" value="Headlight"> Headlight</label>
+                            <label class="check-item"><input type="checkbox" value="Tail Light"> Tail Light</label>
+                            <label class="check-item"><input type="checkbox" value="Fairings"> Fairings</label>
+                            <label class="check-item"><input type="checkbox" value="Instrument Cluster"> Instrument Cluster</label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary full-width" style="margin-top: 2rem;">Submit Modification Request</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Check if user is logged in, if not redirect to login
+        if (!ProfileManager.getUser() || !ProfileManager.getUser().loggedIn) {
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

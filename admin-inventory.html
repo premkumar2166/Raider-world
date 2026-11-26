@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Inventory | Raiders World Owner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body { margin: 0; padding: 0; display: flex; min-height: 100vh; background-color: #0b0b0e; color: var(--text-primary); }
+        .sidebar { width: 280px; background: rgba(10,10,13,0.98); border-right: 1px solid var(--border-glass); padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 2rem; position: fixed; height: 100vh; z-index: 10; }
+        .main-content { margin-left: 280px; padding: 2rem 3rem; flex: 1; min-height: 100vh; overflow-y: auto; }
+        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; color: var(--text-secondary); text-decoration: none; border-radius: 0.5rem; transition: var(--transition); }
+        .nav-item:hover, .nav-item.active { background: rgba(245, 158, 11, 0.1); color: var(--accent-color); border-left: 3px solid var(--accent-color); }
+        .panel { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-glass); border-radius: 1rem; padding: 1.5rem; backdrop-filter: blur(10px); }
+        .dashboard-grid { display: grid; gap: 1.5rem; }
+    </style>
+</head>
+<body class="dark-theme carbon-fiber">
+
+    <aside class="sidebar">
+        <a href="index.html" class="logo" style="margin-bottom: 2rem;">
+            <span class="logo-text">OWNER</span><span class="logo-accent">PORTAL</span>
+        </a>
+        <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <a href="admin.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Control Center</a>
+            <a href="admin-orders.html" class="nav-item"><i data-lucide="shopping-cart"></i> Sales & Orders</a>
+            <a href="admin-inventory.html" class="nav-item active"><i data-lucide="package-plus"></i> Store Inventory</a>
+            <a href="admin-otp.html" class="nav-item"><i data-lucide="shield-alert"></i> OTP Tracking Logs</a>
+            <a href="admin-dispatch.html" class="nav-item"><i data-lucide="truck"></i> Service Dispatch</a>
+            <a href="admin-engine.html" class="nav-item"><i data-lucide="file-check"></i> Transparency Engine</a>
+            <a href="admin-scanning.html" class="nav-item"><i data-lucide="scan"></i> Scanning Analysis</a>
+            <a href="admin-mechanics.html" class="nav-item"><i data-lucide="users"></i> Mechanic Applications</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <h1 style="font-size: 2.2rem; font-weight: 800;">Digital Storefront Inventory</h1>
+                <p class="text-secondary">Dynamically publish new Rider Gear, Gadgets, and Bike Parts directly to the live website catalogs.</p>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-bottom: 2.5rem; border-top: 2px solid var(--accent-color);">
+            <h3 style="margin-bottom: 1.5rem; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="package-plus"></i> <span id="formTitle">Publish New Product</span></h3>
+            <form onsubmit="event.preventDefault(); addProduct(this);">
+                <input type="hidden" id="editIndex" value="-1">
+                <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; margin-top: 0; margin-bottom: 1.5rem;">
+                    <div class="input-group">
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 600;">Product Title</label>
+                        <input type="text" placeholder="e.g. Alpinestars GP Pro Gloves" required style="border: 1px solid var(--border-glass); background: rgba(255,255,255,0.02); width: 100%; padding: 0.8rem; border-radius: 0.5rem; color: #fff; box-sizing: border-box;">
+                    </div>
+                    <div class="input-group">
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 600;">Retail Price (₹)</label>
+                        <input type="number" step="0.01" placeholder="e.g. 199.99" required style="border: 1px solid var(--border-glass); background: rgba(255,255,255,0.02); width: 100%; padding: 0.8rem; border-radius: 0.5rem; color: #fff; box-sizing: border-box;">
+                    </div>
+                </div>
+
+                <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; margin-top: 0; margin-bottom: 2rem;">
+                    <div class="input-group">
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 600;">Target Catalog Category</label>
+                        <select required style="border: 1px solid var(--border-glass); background: rgba(10,10,13,0.9); width: 100%; padding: 0.8rem; border-radius: 0.5rem; color: #fff; box-sizing: border-box; appearance: none;">
+                            <option value="">-- Select Storefront Page --</option>
+                            <option value="gear">Rider Gear & Armor (`gear.html`)</option>
+                            <option value="parts">Performance Parts (`products.html`)</option>
+                            <option value="tech">Tech & Communication</option>
+                            <option value="maintenance">Maintenance & Accessories</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 600;">Upload HQ Product Image</label>
+                        <input type="file" required style="border: 1px dashed var(--border-glass); background: rgba(255,255,255,0.02); width: 100%; padding: 0.6rem; border-radius: 0.5rem; color: var(--text-secondary); box-sizing: border-box;">
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="arrow-up-circle"></i> Deploy to Live Storefront</button>
+                <button type="button" id="cancelBtn" onclick="cancelEdit()" class="btn btn-outline" style="padding: 1rem 2rem; font-size: 1.1rem; display: none; margin-left: 1rem;">Cancel Edit</button>
+            </form>
+        </div>
+
+        <h3 style="margin-bottom: 1.5rem;">Currently Active Products</h3>
+        <div class="panel" style="padding: 0; overflow: hidden;">
+            <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
+                <thead>
+                    <tr>
+                        <th style="text-align: left; padding: 1rem; border-bottom: 2px solid var(--border-glass); color: var(--text-secondary);">Product Name</th>
+                        <th style="text-align: left; padding: 1rem; border-bottom: 2px solid var(--border-glass); color: var(--text-secondary);">Category</th>
+                        <th style="text-align: left; padding: 1rem; border-bottom: 2px solid var(--border-glass); color: var(--text-secondary);">Price (₹)</th>
+                        <th style="text-align: left; padding: 1rem; border-bottom: 2px solid var(--border-glass); color: var(--text-secondary);">Status</th>
+                        <th style="text-align: left; padding: 1rem; border-bottom: 2px solid var(--border-glass); color: var(--text-secondary);">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong>Axor Apex V2</strong></td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">Rider Gear</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">₹13985.51</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #10b981; font-weight: 600;">Online</span></td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <button onclick="editProduct(this)" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; margin-right: 0.5rem;">Edit</button>
+                            <button onclick="deleteProduct(this)" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; background: rgba(239, 68, 68, 0.1); color: #ef4444;">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong>Sena Bluetooth Intercom</strong></td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">Tech & Gadgets</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">₹27878.76</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #10b981; font-weight: 600;">Online</span></td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <button onclick="editProduct(this)" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; margin-right: 0.5rem;">Edit</button>
+                            <button onclick="deleteProduct(this)" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; background: rgba(239, 68, 68, 0.1); color: #ef4444;">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong>Dhoom Exhaust System</strong></td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">Bike Parts</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">₹11234.92</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #f59e0b; font-weight: 600;">Low Stock</span></td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <button onclick="editProduct(this)" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; margin-right: 0.5rem;">Edit</button>
+                            <button onclick="deleteProduct(this)" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; background: rgba(239, 68, 68, 0.1); color: #ef4444;">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 style="margin-top: 3rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="clipboard-list"></i> Pending Sell Requests</h3>
+        <div class="panel" style="padding: 0; overflow: hidden;">
+            <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
+                <thead>
+                    <tr>
+                        <th style="text-align: left; padding: 1rem; border-bottom: 2px solid var(--border-glass); color: var(--text-secondary);">Bike / Asset</th>
+                        <th style="text-align: left; padding: 1rem; border-bottom: 2px solid var(--border-glass); color: var(--text-secondary);">Specs</th>
+                        <th style="text-align: left; padding: 1rem; border-bottom: 2px solid var(--border-glass); color: var(--text-secondary);">Ask Price (₹)</th>
+                        <th style="text-align: left; padding: 1rem; border-bottom: 2px solid var(--border-glass); color: var(--text-secondary);">Seller Contact</th>
+                        <th style="text-align: left; padding: 1rem; border-bottom: 2px solid var(--border-glass); color: var(--text-secondary);">Decision</th>
+                    </tr>
+                </thead>
+                <tbody id="sellRequestsBody">
+                    <!-- Injected via JS -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+        
+        // Load existing products on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProductTable();
+            updateSellRequestsTable();
+            checkPendingRequests();
+        });
+
+        function checkPendingRequests() {
+            const requests = JSON.parse(localStorage.getItem('raiders_sell_requests')) || [];
+            if (requests.length > 0) {
+                // Add badge to the active sidebar item (Store Inventory)
+                const navItem = document.querySelector('.nav-item.active');
+                if (navItem) navItem.innerHTML += `<span style="background: #ef4444; color: white; font-size: 0.7rem; padding: 0.1rem 0.5rem; border-radius: 1rem; margin-left: auto;">${requests.length}</span>`;
+            }
+        }
+        
+        function addProduct(form) {
+            const title = form.querySelector('input[type="text"]').value;
+            const price = parseFloat(form.querySelector('input[type="number"]').value).toFixed(2);
+            const inrPrice = price;
+            const select = form.querySelector('select');
+            const categoryValue = select.value;
+            const categoryText = select.options[select.selectedIndex].text;
+            const editIndex = parseInt(document.getElementById('editIndex').value);
+            
+            const product = {
+                title: title,
+                price: parseFloat(inrPrice),
+                category: categoryValue,
+                categoryText: categoryText.split(' (')[0],
+                image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=400', // Default image
+                status: 'Online',
+                id: Date.now() // Simple ID
+            };
+            
+            let products = JSON.parse(localStorage.getItem('raiders_products')) || [];
+            
+            if (editIndex >= 0) {
+                // Edit existing product
+                products[editIndex] = { ...products[editIndex], ...product };
+                localStorage.setItem('raiders_products', JSON.stringify(products));
+                updateProductTable();
+                cancelEdit();
+                showSuccess('Product updated successfully!');
+            } else {
+                // Add new product
+                products.unshift(product);
+                localStorage.setItem('raiders_products', JSON.stringify(products));
+                updateProductTable();
+                form.reset();
+                showSuccess('Product deployed to live storefront!');
+            }
+        }
+        
+        function updateProductTable() {
+            const products = JSON.parse(localStorage.getItem('raiders_products')) || [];
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            products.forEach((product, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong>${product.title}</strong></td>
+                    <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">${product.categoryText}</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">₹${product.price.toFixed(2)}</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #10b981; font-weight: 600;">${product.status}</span></td>
+                    <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <button onclick="editProduct(${index})" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; margin-right: 0.5rem;">Edit</button>
+                        <button onclick="deleteProduct(${index})" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; background: rgba(239, 68, 68, 0.1); color: #ef4444;">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        function editProduct(index) {
+            const products = JSON.parse(localStorage.getItem('raiders_products')) || [];
+            const product = products[index];
+            
+            // Populate form
+            const form = document.querySelector('form');
+            form.querySelector('input[type="text"]').value = product.title;
+            form.querySelector('input[type="number"]').value = product.price;
+            
+            // Set category
+            const categorySelect = form.querySelector('select');
+            categorySelect.value = product.category;
+            
+            // Set edit mode
+            document.getElementById('editIndex').value = index;
+            document.getElementById('formTitle').textContent = 'Edit Product';
+            document.getElementById('submitBtn').innerHTML = '<i data-lucide="edit"></i> Update Product';
+            document.getElementById('cancelBtn').style.display = 'inline-flex';
+            
+            lucide.createIcons();
+        }
+        
+        function deleteProduct(index) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                let products = JSON.parse(localStorage.getItem('raiders_products')) || [];
+                products.splice(index, 1);
+                localStorage.setItem('raiders_products', JSON.stringify(products));
+                updateProductTable();
+                showSuccess('Product deleted successfully!');
+            }
+        }
+        
+        function cancelEdit() {
+            const form = document.querySelector('form');
+            form.reset();
+            document.getElementById('editIndex').value = '-1';
+            document.getElementById('formTitle').textContent = 'Publish New Product';
+            document.getElementById('submitBtn').innerHTML = '<i data-lucide="arrow-up-circle"></i> Deploy to Live Storefront';
+            document.getElementById('cancelBtn').style.display = 'none';
+            lucide.createIcons();
+        }
+        
+        function showSuccess(message) {
+            // Simple success feedback
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="check-circle"></i> ' + message;
+            btn.style.backgroundColor = '#10b981';
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.backgroundColor = '';
+                lucide.createIcons();
+            }, 2000);
+        }
+
+        // --- Sell Requests Logic ---
+        function updateSellRequestsTable() {
+            const requests = JSON.parse(localStorage.getItem('raiders_sell_requests')) || [];
+            const tbody = document.getElementById('sellRequestsBody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            if(requests.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="padding:1rem; text-align:center; color:var(--text-secondary);">No pending requests.</td></tr>';
+                return;
+            }
+
+            requests.forEach((req, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <div style="display:flex; align-items:center; gap:1rem;">
+                            <div style="width:40px; height:40px; border-radius:0.3rem; background:url('${req.image}') center/cover;"></div>
+                            <strong>${req.title}</strong>
+                        </div>
+                    </td>
+                    <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">${req.details}</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">₹${req.price}</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <div>${req.contact}</div>
+                        <div style="font-size:0.8rem; color:var(--text-secondary);">${req.email || ''}</div>
+                    </td>
+                    <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <button onclick="approveRequest(${index})" class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; margin-right: 0.5rem;">Approve</button>
+                        <button onclick="rejectRequest(${index})" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; background: rgba(239, 68, 68, 0.1); color: #ef4444;">Reject</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function approveRequest(index) {
+            const requests = JSON.parse(localStorage.getItem('raiders_sell_requests')) || [];
+            const req = requests[index];
+            
+            const product = {
+                title: req.title,
+                price: parseFloat(req.price),
+                category: 'Used Bikes',
+                categoryText: 'Customer Listing',
+                image: req.image,
+                details: req.details,
+                status: 'Online',
+                id: Date.now()
+            };
+            
+            let products = JSON.parse(localStorage.getItem('raiders_products')) || [];
+            products.unshift(product);
+            localStorage.setItem('raiders_products', JSON.stringify(products));
+            
+            requests.splice(index, 1);
+            localStorage.setItem('raiders_sell_requests', JSON.stringify(requests));
+            
+            updateProductTable();
+            updateSellRequestsTable();
+            alert(`Approval Email sent to seller (${req.email || 'No email'}) successfully!`);
+            showSuccess('Bike approved and added to Inventory!');
+        }
+
+        function rejectRequest(index) {
+            if(confirm('Reject this listing?')) {
+                let requests = JSON.parse(localStorage.getItem('raiders_sell_requests')) || [];
+                requests.splice(index, 1);
+                localStorage.setItem('raiders_sell_requests', JSON.stringify(requests));
+                updateSellRequestsTable();
+            }
+        }
+    </script>
+</body>
+</html>

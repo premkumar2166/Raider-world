@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Gear | Raiders World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-header { padding: 120px 0 60px; text-align: center; background: url('https://images.unsplash.com/photo-1520975661595-6453be3f7070?auto=format&fit=crop&q=80') center/cover no-repeat; position: relative; }
+        .page-header::before { content: ''; position: absolute; inset: 0; background: rgba(10,10,13,0.85); }
+        .page-header .container { position: relative; z-index: 1; }
+        .glove-img { background-image: url('https://images.unsplash.com/photo-1510166089176-b57564a5b7d1?auto=format&fit=crop&q=80'); }
+        .boot-img { background-image: url('https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&q=80'); }
+    </style>
+</head>
+<body class="dark-theme">
+    <script>
+        // Check if user is logged in, if not redirect to login page
+        function checkLogin() {
+            const user = localStorage.getItem('raiders_user');
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        }
+        checkLogin();
+    </script>
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Parts & Bikes</a>
+                <a href="gear.html" class="active">Rider Gear</a>
+                <a href="brands.html">Brands</a>
+                <a href="marketplace.html">Buy/Sell Bikes</a>
+                <a href="services.html">Services</a>
+                <a href="scanning.html">Bike Scanning</a>
+                <a href="tracker.html">Bike Location</a>
+                <a href="about.html">About</a>
+                <a href="login.html" class="text-accent">Login</a>
+            </nav>
+            <div class="nav-actions">
+                <div class="profile-container">
+                    <button class="icon-btn profile-btn" id="profileBtn" aria-label="Profile">
+                        <img src="https://via.placeholder.com/32" alt="Profile" class="profile-photo">
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i data-lucide="user"></i> My Profile
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i data-lucide="settings"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="loginBtn">
+                            <i data-lucide="log-in"></i> Login
+                        </button>
+                        <button class="dropdown-item" id="logoutBtn" style="display: none;">
+                            <i data-lucide="log-out"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                <a href="cart.html" class="icon-btn cart-btn" aria-label="Cart" style="display: flex; text-decoration: none;">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1 class="hero-title">Elite Rider Gear</h1>
+                <p class="hero-subtitle" style="margin: 0 auto;">Drown out the noise. Gear up for the journey.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-intro" style="margin-bottom: 1.5rem; text-align: center;">
+                    <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Rider Gear Collection</h2>
+                    <p style="color: #ddd; max-width: 720px; margin: 0 auto;">Shop premium gloves, jackets, boots, and tech with clear product details. Add items to your cart and check out instantly.</p>
+                </div>
+                <div class="grid grid-3" id="gearGrid">
+                    <!-- Gear products will be loaded dynamically -->
+                    <div class="card product-card">
+                        <div class="card-image boot-img" style="background-image: url('https://th.bing.com/th/id/R.96ab1906550fca35261f59a4544f5e11?rik=iqlDJIGz1QVvLA&riu=http%3a%2f%2fstore-eu.sena.com%2fcdn%2fshop%2ffiles%2fB2M-01__MESH_1.jpg%3fv%3d1710226867&ehk=WOQP6GV3jrT3HcjkG9j0HDPSWuVG8yzuGcnBte7fq8k%3d&risl=&pid=ImgRaw&r=0');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Tech & Communication</div><h3 class="card-title">Sena Bluetooth Intercom</h3>
+                            <div class="card-footer"><span class="price">₹299.00</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Sena Bluetooth Intercom" data-price="299.00" data-category="Tech & Communication" data-image="https://images.unsplash.com/photo-1593005510509-d05b264f1c9c?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1520975661595-6453be3f7070?auto=format&fit=crop&q=80');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Riding Jackets</div><h3 class="card-title">Rynox Stealth Evo</h3>
+                            <div class="card-footer"><span class="price">₹219.00</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Rynox Stealth Evo" data-price="219.00" data-category="Riding Jackets" data-image="https://images.unsplash.com/photo-1520975661595-6453be3f7070?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://i.pinimg.com/736x/84/27/9c/84279cc01fbca25076adcfb73439b7a2.jpg');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Boots</div><h3 class="card-title">Orazo Riding Boots</h3>
+                            <div class="card-footer"><span class="price">₹185.00</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Orazo Riding Boots" data-price="185.00" data-category="Boots" data-image="https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://tse2.mm.bing.net/th/id/OIP.dM7aayrFeF9POLEcf1aW3gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Protective Armor</div><h3 class="card-title">Knox Urbane Pro Mk3</h3>
+                            <div class="card-footer"><span class="price">₹295.00</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Knox Urbane Pro Mk3" data-price="295.00" data-category="Protective Armor" data-image="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://lundboatsgear.com/images/thumbs/0000723_rage-rain-jacket-stealth.jpeg');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Wet Weather</div><h3 class="card-title">Stealth Rain Gear Suit</h3>
+                            <div class="card-footer"><span class="price">₹89.99</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Stealth Rain Gear Suit" data-price="89.99" data-category="Wet Weather" data-image="https://images.unsplash.com/photo-1502744688674-c619d1586c9e?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://d2cdo4blch85n8.cloudfront.net/wp-content/uploads/2023/04/Shin-Kamen-Rider-Takeshi-Hongo-Motorcycle-Helmet-Replica.jpg');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Accessories</div><h3 class="card-title">Carbon Helmet Cap</h3>
+                            <div class="card-footer"><span class="price">₹25.00</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Carbon Helmet Cap" data-price="25.00" data-category="Accessories" data-image="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://www.amazon.in/Motorcycle-Handlebar-Vibration-Dampener-iPhone/dp/B0DK8QZZ66');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Tech Gadgets</div><h3 class="card-title">Quad Lock Mount Pro</h3>
+                            <div class="card-footer"><span class="price">₹4,999</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Quad Lock Mount Pro" data-price="4999" data-category="Tech Gadgets" data-image="https://m.media-amazon.com/images/I/61fPSInDU9L._AC_SL1500_.jpg"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://deanauto.in/wp-content/uploads/2025/09/2-2.png');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Tools</div><h3 class="card-title">Portable Tire Inflator</h3>
+                            <div class="card-footer"><span class="price">₹45.00</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Portable Tire Inflator" data-price="45.00" data-category="Tools" data-image="https://images.unsplash.com/photo-1481541782298-b80e8afc66f9?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://tse3.mm.bing.net/th/id/OIP.Aw9Ek-TI3GpU6x9q1tBkYgAAAA?w=375&h=328&rs=1&pid=ImgDetMain&o=7&rm=3');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Luggage</div><h3 class="card-title">Waterproof Backpack</h3>
+                            <div class="card-footer"><span class="price">₹110.00</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Waterproof Backpack" data-price="110.00" data-category="Luggage" data-image="https://plus.unsplash.com/premium_photo-1677610022422-9df7d01869e5?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://tse1.mm.bing.net/th/id/OIP.CQ2aorBJHgHxGA09k4GyrAHaHa?w=600&h=600&rs=1&pid=ImgDetMain&o=7&rm=3');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Tech</div><h3 class="card-title">Smart TPMS Sensor</h3>
+                            <div class="card-footer"><span class="price">₹99.99</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Smart TPMS Sensor" data-price="99.99" data-category="Tech" data-image="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <!-- New Gear 1 -->
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1618355272254-14f0165a7a7a?auto=format&fit=crop&q=80');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Premium Helmets</div><h3 class="card-title">AGV Pista GP RR Carbon</h3>
+                            <div class="card-footer"><span class="price">₹1,35,000</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="AGV Pista GP RR Carbon" data-price="135000" data-category="Premium Helmets" data-image="https://images.unsplash.com/photo-1618355272254-14f0165a7a7a?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <!-- New Gear 2 -->
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&q=80');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Boots</div><h3 class="card-title">Alpinestars SMX-6 V2</h3>
+                            <div class="card-footer"><span class="price">₹38,000</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Alpinestars SMX-6 V2" data-price="38000" data-category="Boots" data-image="https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <!-- New Gear 3 -->
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1593005510509-d05b264f1c9c?auto=format&fit=crop&q=80');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Tech</div><h3 class="card-title">Cardo Packtalk Edge</h3>
+                            <div class="card-footer"><span class="price">₹32,000</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Cardo Packtalk Edge" data-price="32000" data-category="Tech" data-image="https://images.unsplash.com/photo-1593005510509-d05b264f1c9c?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <!-- New Gear 4 -->
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Riding Jackets</div><h3 class="card-title">Dainese Racing 4</h3>
+                            <div class="card-footer"><span class="price">₹45,000</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Dainese Racing 4" data-price="45000" data-category="Riding Jackets" data-image="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                    <!-- New Gear 5 -->
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('https://ucarecdn.com/2be0e196-b930-4170-b177-915d7c5489b8/-/format/auto/-/preview/1080x1080/-/quality/lighter/Features.jpg');"></div>
+                        <div class="card-content">
+                            <div class="card-meta">Riding Gloves</div><h3 class="card-title">Rev'it! Sand 4</h3>
+                            <div class="card-footer"><span class="price">₹12,000</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-icon add-to-cart" data-title="Rev'it! Sand 4" data-price="12000" data-category="Riding Gloves" data-image="https://ucarecdn.com/2be0e196-b930-4170-b177-915d7c5489b8/-/format/auto/-/preview/1080x1080/-/quality/lighter/Features.jpg"><i data-lucide="plus"></i></button><button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer bg-darker">
+        <div class="footer-bottom container" style="margin-top:0">
+            <p>&copy; 2026 Raiders World.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeLoginModal">&times;</button>
+            <h2>Welcome Back</h2>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Login</button>
+                <p class="form-footer">Don't have an account? <a href="#" class="text-accent">Sign up here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Load gear products when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGearProducts();
+        });
+
+        function loadGearProducts() {
+            const gearGrid = document.getElementById('gearGrid');
+            const products = JSON.parse(localStorage.getItem('raiders_products') || '[]');
+            const gearProducts = products.filter(p => p.category === 'gear');
+
+            if (gearProducts.length > 0) {
+                // Append products from localStorage to the existing grid
+                const dynamicHtml = gearProducts.map(product => `
+                    <div class="card product-card">
+                        <div class="card-image" style="background-image: url('${product.image || 'https://images.unsplash.com/photo-1557008075-7f2c5efa4cb9?auto=format&fit=crop&q=80'}'); background-size: cover; background-position: center;"></div>
+                        <div class="card-content">
+                            <div class="card-meta">${product.category}</div>
+                            <h3 class="card-title">${product.title}</h3>
+                            <div class="card-footer">
+                                <span class="price">₹${parseFloat(product.price).toLocaleString()}</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-icon add-to-cart" data-title="${product.title}" data-price="${product.price}" data-category="${product.category}" data-image="${product.image || 'https://images.unsplash.com/photo-1557008075-7f2c5efa4cb9?auto=format&fit=crop&q=80'}">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                    <button class="btn btn-primary" onclick="window.location.href='cart.html'" style="padding: 0 1rem; border-radius: 0.5rem;">Buy Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                gearGrid.insertAdjacentHTML('beforeend', dynamicHtml);
+            }
+
+            // Re-initialize Lucide icons for dynamically added content
+            if (window.lucide && gearProducts.length > 0) {
+                lucide.createIcons();
+            }
+        }
+    </script>
+</body>
+</html>

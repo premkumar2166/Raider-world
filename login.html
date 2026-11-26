@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Raiders World</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+    <main class="login-page">
+        <!-- Background handled by CSS -->
+        <a href="index.html" class="logo" style="position: absolute; top: 2rem; left: 2rem; z-index: 10;">
+            <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+        </a>
+
+        <div class="login-container">
+
+            <form class="login-form" id="pageLoginForm" onsubmit="handlePageLogin(event)">
+                <div class="form-group input-with-icon">
+                    <div class="email-avatar-trigger" onclick="document.getElementById('avatarInput').click()" title="Upload Photo">
+                        <i data-lucide="user" id="avatarIcon"></i>
+                        <img id="avatarPreview" src="" style="display: none;">
+                    </div>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;" onchange="handleAvatarUpload(this)">
+                    <input type="text" id="pageUsername" placeholder="User Name" required style="padding-left: 3.6rem;">
+                </div>
+
+                <div class="form-group input-with-icon">
+                    <input type="email" id="pageEmail" placeholder="Email Address" required>
+                    <i data-lucide="mail"></i>
+                </div>
+
+                <div class="form-group input-with-icon">
+                    <input type="password" id="pagePassword" placeholder="Password" required>
+                    <i data-lucide="lock"></i>
+                </div>
+
+                <div class="form-options">
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="pageRememberMe">
+                        <label for="pageRememberMe">Remember me</label>
+                    </div>
+
+                    <div class="forgot-password">
+                        <a href="#" onclick="alert('Password reset link sent!'); return false;">Forgot Password?</a>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    LOGIN
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        function handleAvatarUpload(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatarPreview').src = e.target.result;
+                    document.getElementById('avatarPreview').style.display = 'block';
+                    document.getElementById('avatarIcon').style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function handlePageLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('pageUsername').value;
+            const email = document.getElementById('pageEmail').value;
+            const password = document.getElementById('pagePassword').value;
+
+            if (!username || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const hasAvatar = document.getElementById('avatarPreview').style.display !== 'none';
+            const avatarSrc = document.getElementById('avatarPreview').src;
+
+            // Mock user data
+            const userData = {
+                name: username.toUpperCase(),
+                email: email,
+                photo: hasAvatar ? avatarSrc : `https://ui-avatars.com/api/?name=${username}&background=f59e0b&color=fff&size=128`,
+                phone: '',
+                loginTime: new Date().toLocaleString(),
+                loggedIn: true
+            };
+
+            // Save user profile
+            ProfileManager.saveUser(userData);
+
+            // Show success and redirect
+            alert('Welcome ' + userData.name + '! Redirecting to home...');
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

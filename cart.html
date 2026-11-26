@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Cart | Raiders World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-header { padding: 120px 0 60px; text-align: center; background: var(--bg-darker); position: relative; border-bottom: 1px solid var(--border-glass);}
+        
+        .cart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; margin-top: 3rem; }
+        .cart-item { display: flex; gap: 1.5rem; padding: 1.5rem; border-bottom: 1px solid var(--border-glass); align-items: center; }
+        .cart-img { width: 100px; height: 100px; border-radius: 0.5rem; background-size: cover; background-position: center; }
+        .cart-details { flex-grow: 1; }
+        .cart-title { font-size: 1.2rem; margin-bottom: 0.25rem; }
+        .cart-meta { color: var(--text-secondary); font-size: 0.9rem; }
+        .cart-price { font-size: 1.2rem; font-weight: bold; color: var(--accent-color); }
+        .quantity-control { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+        .qty-btn { background: rgba(255,255,255,0.1); border: none; color: white; width: 28px; height: 28px; border-radius: 5px; cursor: pointer; }
+        
+        .checkout-panel { padding: 2rem; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-secondary); }
+        .summary-total { display: flex; justify-content: space-between; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-glass); font-size: 1.5rem; font-weight: bold; color: var(--text-primary); }
+        
+        @media(max-width: 768px) { .cart-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body class="dark-theme">
+    <script>
+        // Check if user is logged in, if not redirect to login page
+        function checkLogin() {
+            const user = localStorage.getItem('raiders_user');
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        }
+        checkLogin();
+    </script>
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Parts & Bikes</a>
+                <a href="gear.html">Rider Gear</a>
+                <a href="marketplace.html">Buy/Sell Bikes</a>
+                <a href="services.html">Services</a>
+                <a href="scanning.html">Bike Scanning</a>
+                <a href="tracker.html" class="text-accent">Bike Location</a>
+                <a href="about.html">About</a>
+                <a href="login.html" class="text-accent">Login</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="icon-btn search-trigger" aria-label="Search">
+                    <i data-lucide="search"></i>
+                </button>
+                <div class="profile-container">
+                    <button class="icon-btn profile-btn" id="profileBtn" aria-label="Profile">
+                        <img src="https://via.placeholder.com/32" alt="Profile" class="profile-photo">
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i data-lucide="user"></i> My Profile
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i data-lucide="settings"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="loginBtn">
+                            <i data-lucide="log-in"></i> Login
+                        </button>
+                        <button class="dropdown-item" id="logoutBtn" style="display: none;">
+                            <i data-lucide="log-out"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                <a href="cart.html" class="icon-btn cart-btn" aria-label="Cart" style="display: flex; text-decoration: none;">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-badge">3</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1 class="hero-title">Your <span class="text-accent">Cart</span></h1>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="cart-grid">
+                    <div id="cartItemsList" class="cart-items glass-panel" style="padding: 1rem 2rem;">
+                        <!-- Dynamically filled by script.js -->
+                        <div style="text-align:center; padding: 4rem 1rem;">
+                            <i data-lucide="loader" class="spin" style="width: 32px; height: 32px; color: var(--accent-color);"></i>
+                            <p>Loading your cart...</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="checkout-panel glass-panel">
+                            <h2>Order Summary</h2>
+                            <div style="margin-top: 1.5rem;">
+                                <div class="summary-row">
+                                    <span>Subtotal</span>
+                                    <span id="cartSubtotal">₹0.00</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Taxes (9%)</span>
+                                    <span id="cartTax">₹0.00</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Shipping</span>
+                                    <span style="color: var(--success);">Free</span>
+                                </div>
+                                <div class="summary-total">
+                                    <span>Total</span>
+                                    <span id="cartTotal" class="text-accent">₹0.00</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary full-width" style="margin-top: 2rem; padding: 1.2rem; font-size: 1.1rem;" onclick="document.getElementById('checkoutModal').classList.add('show')">Proceed to Checkout</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer bg-darker">
+        <div class="footer-bottom container" style="margin-top:0">
+            <p>&copy; 2026 Raiders World.</p>
+        </div>
+    </footer>
+    <div id="checkoutModal" class="modal-overlay">
+        <div class="modal-content glass-panel" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Buying <span class="text-accent">Order Menu</span></h2>
+                <button class="icon-btn" onclick="document.getElementById('checkoutModal').classList.remove('show')"><i data-lucide="x"></i></button>
+            </div>
+            <p class="text-secondary" style="margin-bottom: 1.5rem;">Please provide your details to complete the order.</p>
+            <form id="checkoutForm" onsubmit="
+                event.preventDefault(); 
+                const details = {
+                    name: document.getElementById('checkoutName').value,
+                    phone: document.getElementById('checkoutPhone').value,
+                    address: document.getElementById('checkoutAddress').value,
+                    payment: 'Standard Checkout',
+                    hasPhoto: document.getElementById('checkoutPhoto').files.length > 0
+                };
+                CartManager.saveOrder(details);
+            ">
+                <div class="input-group" style="margin-bottom: 1rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-size: 0.9rem;">Full Name</label>
+                    <input type="text" id="checkoutName" placeholder="e.g. Mike Henderson" required style="width:100%; padding: 0.8rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: white;">
+                </div>
+                <div class="input-group" style="margin-bottom: 1rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-size: 0.9rem;">Phone Number</label>
+                    <input type="tel" id="checkoutPhone" placeholder="+91 XXXX XXX XXX" required style="width:100%; padding: 0.8rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: white;">
+                </div>
+                <div class="input-group" style="margin-bottom: 1.5rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-size: 0.9rem;">Delivery Address</label>
+                    <textarea id="checkoutAddress" placeholder="Your full address..." required style="width:100%; padding: 0.8rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: white; min-height: 80px;"></textarea>
+                </div>
+                <div class="input-group" style="margin-bottom: 1rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-size: 0.9rem;">Upload Photo</label>
+                    <input type="file" id="checkoutPhoto" accept="image/*" style="width:100%; padding: 0.8rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: white;">
+                </div>
+                <button type="submit" class="btn btn-primary full-width" style="padding: 1rem;">Confirm Order</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeLoginModal">&times;</button>
+            <h2>Welcome Back</h2>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Login</button>
+                <p class="form-footer">Don't have an account? <a href="#" class="text-accent">Sign up here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

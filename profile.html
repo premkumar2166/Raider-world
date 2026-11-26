@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Raiders World</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 120px auto 60px;
+            padding: 2rem;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            border-radius: 1rem;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-color);
+            margin: 0 auto 1.5rem;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .profile-avatar:hover {
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.6);
+            transform: scale(1.05);
+        }
+
+        .profile-photo-input {
+            display: none;
+        }
+
+        .upload-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(245, 158, 11, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .profile-avatar:hover .upload-overlay {
+            opacity: 1;
+        }
+
+        .upload-icon {
+            color: white;
+            font-size: 2rem;
+        }
+
+        .profile-name {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-email {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-info {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .info-item {
+            padding: 1.5rem;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .info-item i {
+            color: var(--accent-color);
+            width: 24px;
+            height: 24px;
+        }
+
+        .info-content h4 {
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .info-content p {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .no-user {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            border-radius: 1rem;
+            margin-top: 120px;
+        }
+
+        .no-user h2 {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .no-user p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <script>
+        // Check if user is logged in, if not redirect to login page
+        function checkLogin() {
+            const user = localStorage.getItem('raiders_user');
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        }
+        checkLogin();
+    </script>
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Parts & Bikes</a>
+                <a href="gear.html">Rider Gear</a>
+                <a href="marketplace.html">Buy/Sell Bikes</a>
+                <a href="services.html">Services</a>
+                <a href="scanning.html">Bike Scanning</a>
+                <a href="tracker.html" class="text-accent">Bike Location</a>
+                <a href="about.html">About</a>
+                <a href="login.html" class="text-accent">Login</a>
+            </nav>
+            <div class="nav-actions">
+                <div class="profile-container-nav">
+                    <button class="icon-btn profile-btn" id="profileBtn" aria-label="Profile">
+                        <img src="https://via.placeholder.com/32" alt="Profile" class="profile-photo">
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i data-lucide="user"></i> My Profile
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i data-lucide="settings"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="loginBtn">
+                            <i data-lucide="log-in"></i> Login
+                        </button>
+                        <button class="dropdown-item" id="logoutBtn" style="display: none;">
+                            <i data-lucide="log-out"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                <a href="cart.html" class="icon-btn cart-btn" aria-label="Cart" style="display: flex; text-decoration: none;">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div id="profileContent"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Raiders World</h3>
+                <p>70 years of excellence in motorcycle services, parts & gear.</p>
+            </div>
+        </div>
+        <div class="footer-bottom container">
+            <p>&copy; 2026 Raiders World. Built with passion.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeLoginModal">&times;</button>
+            <h2>Welcome Back</h2>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Login</button>
+                <p class="form-footer">Don't have an account? <a href="#" class="text-accent">Sign up here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Load profile data
+        const user = ProfileManager.getUser();
+        const profileContent = document.getElementById('profileContent');
+
+        if (user) {
+            profileContent.innerHTML = `
+                <div class="profile-header">
+                    <div style="position: relative; display: inline-block;">
+                        <img src="${user.photo}" alt="${user.name}" class="profile-avatar" id="profileAvatarImg">
+                        <input type="file" id="profilePhotoInput" class="profile-photo-input" accept="image/*">
+                    </div>
+                    <h1 class="profile-name">${user.name}</h1>
+                    <p class="profile-email">${user.email}</p>
+                </div>
+
+                <div class="profile-info">
+                    <div class="info-item">
+                        <i data-lucide="mail"></i>
+                        <div class="info-content">
+                            <h4>Email</h4>
+                            <p>${user.email}</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i data-lucide="calendar"></i>
+                        <div class="info-content">
+                            <h4>Login Time</h4>
+                            <p>${user.loginTime}</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i data-lucide="shield"></i>
+                        <div class="info-content">
+                            <h4>Account Status</h4>
+                            <p>Active & Verified</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i data-lucide="users"></i>
+                        <div class="info-content">
+                            <h4>Crew Membership</h4>
+                            <p>${user.joined ? 'Raiders Crew Member' : 'Not a member yet'}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="wrench"></i> My Modification Requests</h3>
+                    <div id="userModifyRequests" class="profile-info"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="uploadPhotoBtn">Change Photo</button>
+                    <button class="btn btn-secondary" onclick="ProfileManager.logout(); window.location.href='index.html';">Logout</button>
+                </div>
+            `;
+            lucide.createIcons();
+            ModifyManager.renderUserRequests();
+
+            // Handle profile photo upload
+            const fileInput = document.getElementById('profilePhotoInput');
+            const uploadBtn = document.getElementById('uploadPhotoBtn');
+            const avatarImg = document.getElementById('profileAvatarImg');
+
+            if (uploadBtn) {
+                uploadBtn.addEventListener('click', () => {
+                    fileInput.click();
+                });
+            }
+
+            if (fileInput) {
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            const base64Image = event.target.result;
+                            
+                            // Update the profile photo
+                            avatarImg.src = base64Image;
+                            
+                            // Save to local storage
+                            const updatedUser = ProfileManager.getUser();
+                            updatedUser.photo = base64Image;
+                            ProfileManager.saveUser(updatedUser);
+                            
+                            // Update navbar photo
+                            const navPhoto = document.querySelector('.profile-photo');
+                            if (navPhoto) {
+                                navPhoto.src = base64Image;
+                            }
+                            
+                            alert('Profile photo updated successfully!');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        } else {
+            profileContent.innerHTML = `
+                <div class="no-user">
+                    <h2>You're not logged in</h2>
+                    <p>Please log in to view your profile and access your account features.</p>
+                    <button class="btn btn-primary" onclick="document.getElementById('loginModal').classList.add('show');">Login Now</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second-Hand Marketplace | Raiders World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-header { padding: 120px 0 60px; text-align: center; background: url('https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?auto=format&fit=crop&q=80') center/cover no-repeat; position: relative; }
+        .page-header::before { content: ''; position: absolute; inset: 0; background: rgba(10,10,13,0.85); }
+        .page-header .container { position: relative; z-index: 1; }
+        .used-bike-3 { background-image: url('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80'); }
+        .used-bike-4 { background-image: url('https://imgd.aeplcdn.com/310x174/bw/ec/23418/Yamaha-YZFR3-Side-72784.jpg?wm=0&q=75'); }
+    </style>
+</head>
+<body class="dark-theme">
+    <script>
+        // Check if user is logged in, if not redirect to login page
+        function checkLogin() {
+            const user = localStorage.getItem('raiders_user');
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        }
+        checkLogin();
+    </script>
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">RAIDERS</span><span class="logo-accent">WORLD</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Parts & Bikes</a>
+                <a href="gear.html">Rider Gear</a>
+                <a href="brands.html">Brands</a>
+                <a href="marketplace.html" class="active">Buy/Sell Bikes</a>
+                <a href="services.html">Services</a>
+                <a href="scanning.html">Bike Scanning</a>
+                <a href="tracker.html">Bike Location</a>
+                <a href="about.html">About</a>
+                <a href="login.html" class="text-accent">Login</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="icon-btn search-trigger" aria-label="Search">
+                    <i data-lucide="search"></i>
+                </button>
+                <div class="profile-container">
+                    <button class="icon-btn profile-btn" id="profileBtn" aria-label="Profile">
+                        <img src="https://via.placeholder.com/32" alt="Profile" class="profile-photo">
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i data-lucide="user"></i> My Profile
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i data-lucide="settings"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="loginBtn">
+                            <i data-lucide="log-in"></i> Login
+                        </button>
+                        <button class="dropdown-item" id="logoutBtn" style="display: none;">
+                            <i data-lucide="log-out"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                <a href="cart.html" class="icon-btn cart-btn" aria-label="Cart" style="display: flex; text-decoration: none;">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1 class="hero-title">100% Honest <br><span class="text-accent">Marketplace</span></h1>
+                <p class="hero-subtitle" style="margin: 0 auto;">View detailed Quality & Damage reports before you buy.</p>
+            </div>
+        </section>
+
+        <section class="section" style="padding-bottom: 0;">
+            <div class="container">
+                <div class="glass-panel" style="text-align: center; padding: 3rem; background: linear-gradient(rgba(20,20,26,0.8), rgba(20,20,26,0.9)), url('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80') center/cover;">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Want to <span class="text-accent">Sell Your Bike?</span></h2>
+                    <p style="color: #ddd; max-width: 600px; margin: 0 auto 2rem;">Get the best value for your motorcycle. We handle the inspection, listing, and paperwork. Join thousands of satisfied sellers.</p>
+                    <button class="btn btn-primary" onclick="document.getElementById('sellBikeModal').classList.add('show')">List Your Bike Now</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section bg-darker">
+            <div class="container">
+                <div class="grid grid-2">
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image used-bike-1">
+                            <span class="quality-badge"><i data-lucide="check-circle"></i> A-Grade Condition</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>Royal Enfield Classic 350</h3>
+                            <p class="bike-meta">2021 • 14,000 km • Single Owner</p>
+                            <div class="bike-actions" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                <span class="price large">₹50,000</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-outline" onclick="BikeCustomizer.open('Royal Enfield Classic 350', 50000, 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?auto=format&fit=crop&q=80')">Modify</button>
+                                    <button class="btn btn-primary add-to-cart" onclick="alert('Bike Reservation Added to Cart!')">Reserve</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image used-bike-4">
+                            <span class="quality-badge warning"><i data-lucide="alert-circle"></i> Fair Condition</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>Yamaha YZF R3</h3>
+                            <p class="bike-meta">2018 • 32,000 km • Fully Serviced</p>
+                            <div class="bike-actions" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                <span class="price large">₹20,500</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-outline view-report-btn">View Report</button>
+                                    <button class="btn btn-primary add-to-cart" onclick="alert('Bike Reservation Added to Cart!')">Reserve</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('https://www.thrustzone.com/wp-content/uploads/2020/02/2020-KTM-Duke-390-BS6-Review-9.jpg');">
+                            <span class="quality-badge warning"><i data-lucide="alert-circle"></i> Minor Scratches</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>KTM Duke 390</h3>
+                            <p class="bike-meta">2020 • 22,000 km • Fully Serviced</p>
+                            <div class="bike-actions" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                <span class="price large">₹33,100</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-outline view-report-btn">View Report</button><button class="btn btn-primary add-to-cart" onclick="alert('Bike Reservation Added to Cart!')">Reserve</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('https://tse3.mm.bing.net/th/id/OIP.lvgXV5PAHpO3FMnYjse5bQHaEK?rs=1&pid=ImgDetMain&o=7&rm=3');">
+                            <span class="quality-badge"><i data-lucide="check-circle"></i> A-Grade Condition</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>Triumph Bonneville</h3>
+                            <p class="bike-meta">2019 • 18,500 km • Mint</p>
+                            <div class="bike-actions" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                <span class="price large">₹26,200</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-outline view-report-btn">View Report</button><button class="btn btn-primary add-to-cart" onclick="alert('Bike Reservation Added to Cart!')">Reserve</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('https://www.webbikeworld.com/wp-content/uploads/2021/01/2021-Honda-CB500X-4-946x946.jpg');">
+                            <span class="quality-badge"><i data-lucide="check-circle"></i> A-Grade Condition</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>Honda CB500X</h3>
+                            <p class="bike-meta">2021 • 9,000 km • Mint</p>
+                            <div class="bike-actions" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                <span class="price large">₹55,800</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-outline view-report-btn">View Report</button><button class="btn btn-primary add-to-cart" onclick="alert('Bike Reservation Added to Cart!')">Reserve</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('https://tse2.mm.bing.net/th/id/OIP.5HToiTIhDCftiVuJ6VX_LgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3');">
+                            <span class="quality-badge warning"><i data-lucide="alert-circle"></i> New Tires Needed</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>Ducati Streetfighter V4</h3>
+                            <p class="bike-meta">2022 • 12,000 km • Fully Serviced</p>
+                            <div class="bike-actions" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                <span class="price large">₹18,200</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-outline view-report-btn">View Report</button><button class="btn btn-primary add-to-cart" onclick="alert('Bike Reservation Added to Cart!')">Reserve</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('https://tse4.mm.bing.net/th/id/OIP.4xaCqBdobRjPI4lDgPHv_AHaFj?rs=1&pid=ImgDetMain&o=7&rm=3');">
+                            <span class="quality-badge"><i data-lucide="check-circle"></i> A-Grade Condition</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>Suzuki CBR 600RR</h3>
+                            <p class="bike-meta">2016 • 40,000 km • Maintained</p>
+                            <div class="bike-actions" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                <span class="price large">₹20,500</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-outline view-report-btn">View Report</button><button class="btn btn-primary add-to-cart" onclick="alert('Bike Reservation Added to Cart!')">Reserve</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('https://tse2.mm.bing.net/th/id/OIP.k062t9UaeSni2CUms4c7-gHaFk?rs=1&pid=ImgDetMain&o=7&rm=3');">
+                            <span class="quality-badge warning"><i data-lucide="alert-circle"></i> Paint Chip</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>Kawasaki Ninja 400</h3>
+                            <p class="bike-meta">2023 • 3,000 km • Like New</p>
+                            <div class="bike-actions" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                <span class="price large">₹45,000</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-outline view-report-btn">View Report</button><button class="btn btn-primary add-to-cart" onclick="alert('Bike Reservation Added to Cart!')">Reserve</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('https://tse2.mm.bing.net/th/id/OIP.DxbaYGWYhPAFa7rSv_U9pQHaE8?rs=1&pid=ImgDetMain&o=7&rm=3');">
+                            <span class="quality-badge"><i data-lucide="check-circle"></i> A-Grade Condition</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>BMW Scrambler</h3>
+                            <p class="bike-meta">2017 • 26,000 km • Mint</p>
+                            <div class="bike-actions" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                <span class="price large">₹55,800</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-outline view-report-btn">View Report</button><button class="btn btn-primary add-to-cart" onclick="alert('Bike Reservation Added to Cart!')">Reserve</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('https://www.rushlane.com/wp-content/uploads/2022/07/royal-enfield-himalayan-new-colours-launch-6-1068x941.jpg');">
+                            <span class="quality-badge warning"><i data-lucide="alert-circle"></i> Major Rust</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>RE Himalayan</h3>
+                            <p class="bike-meta">2021 • 38,000 km • Needs Work</p>
+                            <div class="bike-actions" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                <span class="price large">₹51,800</span><div style="display:flex; gap:0.5rem;"><button class="btn btn-outline view-report-btn">View Report</button><button class="btn btn-primary add-to-cart" onclick="alert('Bike Reservation Added to Cart!')">Reserve</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quality Report Modal -->
+        <div id="reportModal" class="modal">
+            <div class="modal-content glass-panel">
+                <div class="modal-header">
+                    <h2>Quality Analysis <span class="text-accent">Report</span></h2>
+                    <button class="icon-btn" id="closeModal"><i data-lucide="x"></i></button>
+                </div>
+                <div class="modal-body" style="padding-bottom: 2rem;">
+                    <p class="text-secondary" style="margin-bottom: 2rem;">Comprehensive 50-point inspection results.</p>
+                    <div class="chart-container" style="position: relative; height:300px; width:100%">
+                        <canvas id="qualityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sell Bike Modal -->
+    <div id="sellBikeModal" class="modal">
+        <div class="modal-content glass-panel" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>List Your <span class="text-accent">Bike</span></h2>
+                <button class="icon-btn" id="closeSellModal"><i data-lucide="x"></i></button>
+            </div>
+            <form id="sellBikeForm" class="login-form">
+                <div class="form-group">
+                    <label>Bike Model</label>
+                    <input type="text" required placeholder="e.g. Royal Enfield Classic 350">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="number" required placeholder="2020">
+                    </div>
+                    <div class="form-group">
+                        <label>Kilometers</label>
+                        <input type="number" required placeholder="15000">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Expected Price (₹)</label>
+                    <input type="number" required placeholder="150000">
+                </div>
+                <div class="form-group">
+                    <label>Upload Bike Photo</label>
+                    <input type="file" accept="image/*" required style="padding: 0.5rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 0.5rem; width: 100%; color: var(--text-secondary);">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" required placeholder="seller@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Contact Number</label>
+                    <input type="tel" required placeholder="+91 98765 43210">
+                </div>
+                <button type="submit" class="btn btn-primary full-width" style="margin-top: 1rem;">Submit Listing</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer bg-base">
+        <div class="footer-bottom container" style="margin-top:0">
+            <p>&copy; 2026 Raiders World.</p>
+        </div>
+    </footer>
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeLoginModal">&times;</button>
+            <h2>Welcome Back</h2>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Login</button>
+                <p class="form-footer">Don't have an account? <a href="#" class="text-accent">Sign up here</a></p>
+            </form>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Sell Bike Modal Logic
+        const sellBikeModal = document.getElementById('sellBikeModal');
+        const closeSellModal = document.getElementById('closeSellModal');
+        const sellBikeForm = document.getElementById('sellBikeForm');
+
+        if (closeSellModal && sellBikeModal) {
+            closeSellModal.addEventListener('click', () => sellBikeModal.classList.remove('show'));
+            sellBikeModal.addEventListener('click', (e) => {
+                if (e.target === sellBikeModal) sellBikeModal.classList.remove('show');
+            });
+        }
+
+        if (sellBikeForm) {
+            sellBikeForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const inputs = sellBikeForm.querySelectorAll('input');
+                // inputs: 0=Model, 1=Year, 2=KM, 3=Price, 4=File, 5=Email, 6=Contact
+                
+                const processSubmission = (imgSrc) => {
+                    const request = {
+                        id: Date.now(),
+                        title: inputs[0].value,
+                        details: `${inputs[1].value} • ${inputs[2].value} km`,
+                        price: inputs[3].value,
+                        email: inputs[5].value,
+                        contact: inputs[6].value,
+                        image: imgSrc,
+                        status: 'Pending Review'
+                    };
+
+                    const requests = JSON.parse(localStorage.getItem('raiders_sell_requests')) || [];
+                    requests.push(request);
+                    localStorage.setItem('raiders_sell_requests', JSON.stringify(requests));
+
+                    alert('Listing Submitted! Sent to Owner Portal for approval.');
+                    sellBikeModal.classList.remove('show');
+                    sellBikeForm.reset();
+                };
+
+                const fileInput = inputs[4];
+                if (fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => processSubmission(e.target.result);
+                    reader.readAsDataURL(fileInput.files[0]);
+                } else {
+                    processSubmission('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80');
+                }
+            });
+        }
+
+        // Render Dynamic Used Bikes from Inventory
+        document.addEventListener('DOMContentLoaded', () => {
+            const products = JSON.parse(localStorage.getItem('raiders_products')) || [];
+            const grid = document.querySelector('.grid.grid-2');
+            
+            products.filter(p => p.category === 'Used Bikes').forEach(bike => {
+                const html = `
+                    <div class="card bike-card glass-panel">
+                        <div class="bike-image" style="background-image: url('${bike.image}');">
+                            <span class="quality-badge"><i data-lucide="user"></i> Verified Seller</span>
+                        </div>
+                        <div class="bike-info">
+                            <h3>${bike.title}</h3>
+                            <p class="bike-meta">${bike.details || 'Pre-Owned'}</p>
+                            <div class="bike-actions" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                <span class="price large">₹${Number(bike.price).toLocaleString()}</span>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-outline view-report-btn">View Report</button>
+                                    <button class="btn btn-primary add-to-cart" data-title="${bike.title}" data-price="${bike.price}" data-category="Used Bike" data-image="${bike.image}">Reserve</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('afterbegin', html);
+            });
+            if(window.lucide) lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
